@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AquaClear Admin</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #F7F7F5;
+    color: #0F172A;
+  }
+
+  .login-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .login-card {
+    background: #fff;
+    border: 1px solid #D8DCE1;
+    border-radius: 12px;
+    padding: 32px;
+    max-width: 360px;
+    width: 100%;
+  }
+  .login-brand {
+    width: 44px; height: 44px;
+    background: #1D7A6E;
+    color: #0F172A;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+    margin-bottom: 16px;
+  }
+  .login-title { font-size: 20px; font-weight: 700; margin: 0 0 6px; }
+  .login-sub { font-size: 13px; color: #8A96A3; margin: 0 0 20px; line-height: 1.5; }
+  .login-input {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid #D8DCE1;
+    border-radius: 7px;
+    font-size: 14px;
+    font-family: inherit;
+    margin-bottom: 12px;
+  }
+  .login-btn {
+    width: 100%;
+    background: #1D7A6E;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .login-error {
+    background: #FBF2EC;
+    border: 1px solid #EBD3C0;
+    color: #5A3A22;
+    font-size: 12.5px;
+    padding: 8px 11px;
+    border-radius: 7px;
+    margin-bottom: 12px;
+    display: none;
+  }
+  .login-note { font-size: 11.5px; color: #9AA5B1; margin-top: 14px; line-height: 1.5; }
+
+  .admin-shell { display: none; min-height: 100vh; grid-template-columns: 220px 1fr; }
+  .admin-shell.visible { display: grid; }
+  .admin-sidebar {
+    background: #0F172A;
+    padding: 20px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .admin-brand {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 8px 18px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid #22324A;
+  }
+  .admin-brand-mark {
+    width: 32px; height: 32px;
+    background: #1D7A6E;
+    color: #0F172A;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 12px;
+    flex-shrink: 0;
+  }
+  .admin-brand-text { color: #F7F7F5; font-weight: 700; font-size: 14px; }
+  .admin-nav-btn {
+    display: flex; align-items: center; gap: 10px;
+    background: transparent;
+    border: none;
+    color: #D7DEE6;
+    padding: 10px 10px;
+    border-radius: 7px;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    width: 100%;
+  }
+  .admin-nav-btn:hover { background: #182338; color: #fff; }
+  .admin-nav-btn.active { background: #16332E; color: #6FD6C2; }
+  .admin-sidebar-footer {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid #22324A;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .admin-export-btn {
+    background: #1D7A6E;
+    color: #fff;
+    border: none;
+    padding: 11px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .admin-reset-btn, .admin-logout-btn {
+    background: transparent;
+    border: 1px solid #2B3B4E;
+    color: #9FB0C3;
+    padding: 8px;
+    border-radius: 7px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .admin-reset-btn:hover, .admin-logout-btn:hover { background: #1D2E48; color: #fff; }
+
+  .admin-main { padding: 28px 32px 80px; max-width: 1100px; }
+  .admin-page-title { font-size: 22px; font-weight: 700; margin: 0 0 4px; }
+  .admin-page-sub { font-size: 13.5px; color: #8A96A3; margin: 0 0 22px; line-height: 1.5; }
+
+  .admin-banner {
+    background: #EAF4F2;
+    border: 1px solid #BFE0DA;
+    color: #1D7A6E;
+    font-size: 12.5px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: none;
+  }
+  .admin-banner.visible { display: block; }
+
+  .admin-card {
+    background: #fff;
+    border: 1px solid #D8DCE1;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+  .admin-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .admin-card-title { font-size: 15px; font-weight: 700; margin: 0; }
+  .admin-card-sub { font-size: 12px; color: #8A96A3; margin: 2px 0 0; }
+  .admin-btn {
+    background: #1D7A6E;
+    color: #fff;
+    border: none;
+    padding: 9px 14px;
+    border-radius: 7px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+  .admin-btn.secondary { background: #F0F3F5; color: #3B5169; }
+  .admin-btn.danger { background: #fff; color: #C4501F; border: 1px solid #EBD3C0; }
+  .admin-btn.danger:hover { background: #FBF2EC; }
+  .admin-btn.small { padding: 6px 10px; font-size: 11.5px; }
+
+  .admin-field-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #3B5169;
+    display: block;
+    margin: 10px 0 4px;
+  }
+  .admin-input, .admin-textarea, .admin-select {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid #D8DCE1;
+    border-radius: 6px;
+    font-size: 13.5px;
+    font-family: inherit;
+  }
+  .admin-textarea { min-height: 60px; resize: vertical; }
+  .admin-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .admin-row-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+
+  .admin-list-item {
+    border: 1px solid #EEF1F4;
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+  }
+  .admin-list-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .admin-list-item-title { font-size: 13.5px; font-weight: 600; }
+  .admin-list-item-meta { font-size: 11.5px; color: #8A96A3; margin-top: 2px; }
+  .admin-list-item-body { margin-top: 12px; padding-top: 12px; border-top: 1px solid #EEF1F4; display: none; }
+  .admin-list-item-body.open { display: block; }
+  .admin-item-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+  .admin-subblock {
+    background: #FBFBFA;
+    border: 1px dashed #D8DCE1;
+    border-radius: 7px;
+    padding: 12px;
+    margin-top: 10px;
+  }
+  .admin-subblock-title { font-size: 12px; font-weight: 700; color: #3B5169; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.03em; }
+
+  .admin-chevron { color: #8A96A3; font-size: 16px; flex-shrink: 0; }
+  .admin-checkbox-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+  .admin-checkbox-row label { font-size: 13px; }
+
+  @media (max-width: 800px) {
+    .admin-shell.visible { grid-template-columns: 1fr; }
+    .admin-sidebar { flex-direction: row; overflow-x: auto; padding: 12px; }
+    .admin-brand { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .admin-sidebar-footer { display: none; }
+    .admin-main { padding: 20px 16px 60px; }
+    .admin-row-2, .admin-row-3 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <div class="login-brand">RO</div>
+    <h1 class="login-title">Admin Login</h1>
+    <p class="login-sub">Enter the admin password to edit AquaClear's storefront content.</p>
+    <p class="login-error" id="loginError">Incorrect password. Try again.</p>
+    <input type="password" id="loginPassword" class="login-input" placeholder="Password" onkeydown="if(event.key==='Enter') attemptLogin()" />
+    <button class="login-btn" onclick="attemptLogin()">Log In</button>
+    <p class="login-note">Default password is set in this file's source code (ADMIN_PASSWORD). Change it before deploying publicly.</p>
+  </div>
+</div>
+
+<div class="admin-shell" id="adminShell">
+  <div class="admin-sidebar">
+    <div class="admin-brand">
+      <div class="admin-brand-mark">RO</div>
+      <span class="admin-brand-text">AquaClear Admin</span>
+    </div>
+    <div id="adminNavLinks"></div>
+    <div class="admin-sidebar-footer">
+      <button class="admin-export-btn" onclick="exportDataJs()">Export data.js</button>
+      <button class="admin-reset-btn" onclick="resetToLiveData()">Discard my changes</button>
+      <button class="admin-logout-btn" onclick="logoutAdmin()">Log out</button>
+    </div>
+  </div>
+  <div class="admin-main" id="adminMain"></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+// Guard: if data.js failed to load (e.g. it wasn't kept in the same folder as
+// this file), fail loudly with a visible message instead of a blank screen.
+if (typeof MAJOR_PARTS === "undefined" || typeof READY_MADE_MODELS === "undefined" || typeof ICONS === "undefined") {
+  document.body.innerHTML =
+    '<div style="max-width:480px;margin:80px auto;padding:24px;font-family:sans-serif;' +
+    'background:#FBF2EC;border:1px solid #EBD3C0;border-radius:10px;color:#5A3A22;">' +
+    '<h2 style="margin-top:0;">Could not load data.js</h2>' +
+    '<p>This admin page needs <code>data.js</code> to be in the <strong>same folder</strong> as ' +
+    '<code>admin.html</code>. If you downloaded these files separately, make sure both ' +
+    '<code>admin.html</code> and <code>data.js</code> (and <code>index.html</code>) sit together ' +
+    'in the same folder before opening this page.</p>' +
+    '<p>Check your browser\'s developer console (F12) for the exact error if this persists.</p>' +
+    '</div>';
+  throw new Error("data.js not loaded — aborting admin.html initialization.");
+}
+
+const ADMIN_PASSWORD = "aquaclear-admin";
+const DRAFT_KEY = "ro_admin_draft_data_v1";
+const ICONS_SNAPSHOT = JSON.parse(JSON.stringify(ICONS));
+
+let draft = null;
+
+function loadDraft() {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return null;
+}
+
+function freshDraftFromLiveData() {
+  return {
+    READY_MADE_MODELS: JSON.parse(JSON.stringify(READY_MADE_MODELS)),
+    MAJOR_PARTS: JSON.parse(JSON.stringify(MAJOR_PARTS)),
+    MINOR_GROUPS: JSON.parse(JSON.stringify(MINOR_GROUPS)),
+    MINOR_PRICE: MINOR_PRICE,
+    REQUIRED_CORE: JSON.parse(JSON.stringify(REQUIRED_CORE)),
+    SERVICE_TYPES: JSON.parse(JSON.stringify(SERVICE_TYPES)),
+    SERVICE_PACKAGES: JSON.parse(JSON.stringify(SERVICE_PACKAGES))
+  };
+}
+
+function saveDraft() {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+    showBanner("Changes saved to this browser. Export data.js when ready to publish.");
+  } catch (e) {}
+}
+
+function resetToLiveData() {
+  if (!confirm("Discard all unsaved admin changes and reload from the current data.js? This cannot be undone.")) return;
+  localStorage.removeItem(DRAFT_KEY);
+  draft = freshDraftFromLiveData();
+  render();
+  showBanner("Reverted to the data currently in data.js.");
+}
+
+let bannerTimeout = null;
+function showBanner(msg) {
+  const el = document.getElementById("adminBanner");
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add("visible");
+  clearTimeout(bannerTimeout);
+  bannerTimeout = setTimeout(function() { el.classList.remove("visible"); }, 3000);
+}
+
+function esc(str) {
+  const d = document.createElement("div");
+  d.textContent = str == null ? "" : String(str);
+  return d.innerHTML;
+}
+
+function uid(prefix) {
+  return prefix + "-" + Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4);
+}
+
+function attemptLogin() {
+  const val = document.getElementById("loginPassword").value;
+  if (val === ADMIN_PASSWORD) {
+    sessionStorage.setItem("ro_admin_authed", "1");
+    showAdminShell();
+  } else {
+    document.getElementById("loginError").style.display = "block";
+  }
+}
+
+function logoutAdmin() {
+  sessionStorage.removeItem("ro_admin_authed");
+  document.getElementById("adminShell").classList.remove("visible");
+  document.getElementById("loginWrap").style.display = "flex";
+  document.getElementById("loginPassword").value = "";
+}
+
+function showAdminShell() {
+  document.getElementById("loginWrap").style.display = "none";
+  document.getElementById("adminShell").classList.add("visible");
+  draft = loadDraft() || freshDraftFromLiveData();
+  render();
+}
+
+const ADMIN_SECTIONS = [
+  { id: "majorParts", label: "Major Parts" },
+  { id: "minorParts", label: "Minor Parts" },
+  { id: "readyMade", label: "Ready-Made Models" },
+  { id: "servicePackages", label: "Servicing Packages" },
+  { id: "serviceTypes", label: "Servicing Types" },
+  { id: "settings", label: "Settings" }
+];
+let currentSection = "majorParts";
+const openItems = {};
+
+function goToSection(id) {
+  currentSection = id;
+  render();
+}
+
+function renderNav() {
+  document.getElementById("adminNavLinks").innerHTML = ADMIN_SECTIONS.map(function(s) {
+    return '<button class="admin-nav-btn ' + (currentSection === s.id ? 'active' : '') + '" onclick="goToSection(\'' + s.id + '\')">' + esc(s.label) + '</button>';
+  }).join("");
+}
+
+function render() {
+  renderNav();
+  const main = document.getElementById("adminMain");
+  main.innerHTML = '<div class="admin-banner" id="adminBanner"></div>' + sectionHtml();
+}
+
+function sectionHtml() {
+  if (currentSection === "majorParts") return majorPartsSectionHtml();
+  if (currentSection === "minorParts") return minorPartsSectionHtml();
+  if (currentSection === "readyMade") return readyMadeSectionHtml();
+  if (currentSection === "servicePackages") return servicePackagesSectionHtml();
+  if (currentSection === "serviceTypes") return serviceTypesSectionHtml();
+  if (currentSection === "settings") return settingsSectionHtml();
+  return "";
+}
+
+function toggleItem(key) {
+  openItems[key] = !openItems[key];
+  render();
+}
+
+function majorPartsSectionHtml() {
+  const itemsHtml = draft.MAJOR_PARTS.map(function(p, idx) {
+    const key = "mp-" + p.id;
+    const isOpen = !!openItems[key];
+    const reqFlag = draft.REQUIRED_CORE.indexOf(p.id) !== -1;
+    return '' +
+      '<div class="admin-list-item">' +
+        '<div class="admin-list-item-header" onclick="toggleItem(\'' + key + '\')">' +
+          '<div>' +
+            '<div class="admin-list-item-title">#' + p.seq + ' &middot; ' + esc(p.name) + '</div>' +
+            '<div class="admin-list-item-meta">' + esc(p.group) + ' &middot; ' + p.options.length + ' option(s)' + (p.optional ? ' &middot; optional' : '') + (reqFlag ? ' &middot; required' : '') + '</div>' +
+          '</div>' +
+          '<span class="admin-chevron">' + (isOpen ? '\u2212' : '+') + '</span>' +
+        '</div>' +
+        '<div class="admin-list-item-body ' + (isOpen ? 'open' : '') + '">' +
+          majorPartFormHtml(p, idx) +
+        '</div>' +
+      '</div>';
+  }).join("");
+
+  return '' +
+    '<h2 class="admin-page-title">Major Parts</h2>' +
+    '<p class="admin-page-sub">These are the main components buyers choose in the builder, ready-made specs source, and parts-only catalog.</p>' +
+    '<div class="admin-card">' +
+      '<div class="admin-card-header">' +
+        '<div><p class="admin-card-title">All Major Parts (' + draft.MAJOR_PARTS.length + ')</p><p class="admin-card-sub">Click a part to expand and edit it.</p></div>' +
+        '<button class="admin-btn" onclick="addMajorPart()">+ Add Part</button>' +
+      '</div>' +
+      itemsHtml +
+    '</div>';
+}
+
+function majorPartFormHtml(p, idx) {
+  const iconOptions = Object.keys(ICONS_SNAPSHOT).map(function(k) {
+    return '<option value="' + k + '" ' + (p.icon === k ? 'selected' : '') + '>' + k + '</option>';
+  }).join("");
+  const groupList = ["Structure", "Pre-Filtration", "RO Stage", "UV / UF Stage", "Taste & Finishing", "Delivery", "Electronics"];
+  const groupOptions = groupList.map(function(g) {
+    return '<option value="' + esc(g) + '" ' + (p.group === g ? 'selected' : '') + '>' + esc(g) + '</option>';
+  }).join("");
+  const specsText = (p.specs || []).join("\n");
+  const isRequired = draft.REQUIRED_CORE.indexOf(p.id) !== -1;
+  const optionsHtml = p.options.map(function(o, oi) {
+    return optionFormHtml(p, o, idx, oi);
+  }).join("");
+
+  return '' +
+    '<label class="admin-field-label">Name*</label>' +
+    '<input class="admin-input" value="' + esc(p.name) + '" oninput="updateMajorPartField(' + idx + ', \'name\', this.value)" />' +
+    '<div class="admin-row-2">' +
+      '<div><label class="admin-field-label">Sequence number</label><input type="number" class="admin-input" value="' + p.seq + '" oninput="updateMajorPartField(' + idx + ', \'seq\', parseInt(this.value)||0)" /></div>' +
+      '<div><label class="admin-field-label">Group</label><select class="admin-select" onchange="updateMajorPartField(' + idx + ', \'group\', this.value)">' + groupOptions + '</select></div>' +
+    '</div>' +
+    '<label class="admin-field-label">Short description (shown in the collapsed row)</label>' +
+    '<input class="admin-input" value="' + esc(p.desc || '') + '" oninput="updateMajorPartField(' + idx + ', \'desc\', this.value)" />' +
+    '<label class="admin-field-label">Full info text (shown in the "i" popup)</label>' +
+    '<textarea class="admin-textarea" oninput="updateMajorPartField(' + idx + ', \'info\', this.value)">' + esc(p.info || '') + '</textarea>' +
+    '<label class="admin-field-label">Specs (one per line, shown as bullet points)</label>' +
+    '<textarea class="admin-textarea" oninput="updateMajorPartField(' + idx + ', \'specs\', this.value.split(String.fromCharCode(10)).map(function(s){return s.trim();}).filter(Boolean))">' + esc(specsText) + '</textarea>' +
+    '<div class="admin-row-2">' +
+      '<div><label class="admin-field-label">Icon (used if no image URL is set)</label><select class="admin-select" onchange="updateMajorPartField(' + idx + ', \'icon\', this.value)">' + iconOptions + '</select></div>' +
+      '<div><label class="admin-field-label">Image URL (optional &mdash; overrides icon)</label><input class="admin-input" value="' + esc(p.imageUrl || '') + '" placeholder="https://..." oninput="updateMajorPartField(' + idx + ', \'imageUrl\', this.value)" /></div>' +
+    '</div>' +
+    '<div class="admin-checkbox-row"><input type="checkbox" id="opt_' + idx + '" ' + (p.optional ? 'checked' : '') + ' onchange="updateMajorPartField(' + idx + ', \'optional\', this.checked)" /><label for="opt_' + idx + '">Optional part (shown with an "optional" tag)</label></div>' +
+    '<div class="admin-checkbox-row"><input type="checkbox" id="req_' + idx + '" ' + (isRequired ? 'checked' : '') + ' onchange="toggleRequiredCore(\'' + p.id + '\', this.checked)" /><label for="req_' + idx + '">Required part (flagged if missing from a build)</label></div>' +
+    '<div class="admin-subblock">' +
+      '<p class="admin-subblock-title">Options &amp; Sellers (' + p.options.length + ')</p>' +
+      optionsHtml +
+      '<button class="admin-btn secondary small" onclick="addOption(' + idx + ')">+ Add Option</button>' +
+    '</div>' +
+    '<div class="admin-item-actions"><button class="admin-btn danger small" onclick="deleteMajorPart(' + idx + ')">Delete this part</button></div>';
+}
+
+function optionFormHtml(p, o, partIdx, optIdx) {
+  const sellersHtml = o.sellers.map(function(s, si) {
+    return '' +
+      '<div class="admin-row-3" style="margin-bottom:6px;">' +
+        '<input class="admin-input" value="' + esc(s.name) + '" placeholder="Seller name" oninput="updateSellerField(' + partIdx + ', ' + optIdx + ', ' + si + ', \'name\', this.value)" />' +
+        '<input type="number" class="admin-input" value="' + s.price + '" placeholder="Price" oninput="updateSellerField(' + partIdx + ', ' + optIdx + ', ' + si + ', \'price\', parseFloat(this.value)||0)" />' +
+        '<button class="admin-btn danger small" onclick="deleteSeller(' + partIdx + ', ' + optIdx + ', ' + si + ')">Remove</button>' +
+      '</div>';
+  }).join("");
+
+  return '' +
+    '<div class="admin-subblock" style="background:#fff;">' +
+      '<label class="admin-field-label">Option label</label>' +
+      '<input class="admin-input" value="' + esc(o.label) + '" oninput="updateOptionField(' + partIdx + ', ' + optIdx + ', \'label\', this.value)" />' +
+      '<label class="admin-field-label">Comparison note (shown in the option\'s "i" popup)</label>' +
+      '<textarea class="admin-textarea" oninput="updateOptionField(' + partIdx + ', ' + optIdx + ', \'note\', this.value)">' + esc(o.note || '') + '</textarea>' +
+      '<p class="admin-subblock-title" style="margin-top:10px;">Sellers</p>' +
+      sellersHtml +
+      '<button class="admin-btn secondary small" onclick="addSeller(' + partIdx + ', ' + optIdx + ')">+ Add Seller</button>' +
+      '<div class="admin-item-actions"><button class="admin-btn danger small" onclick="deleteOption(' + partIdx + ', ' + optIdx + ')">Remove this option</button></div>' +
+    '</div>';
+}
+
+function updateMajorPartField(idx, field, value) {
+  draft.MAJOR_PARTS[idx][field] = value;
+  saveDraft();
+}
+
+function toggleRequiredCore(partId, checked) {
+  const set = {};
+  draft.REQUIRED_CORE.forEach(function(id) { set[id] = true; });
+  if (checked) set[partId] = true; else delete set[partId];
+  draft.REQUIRED_CORE = Object.keys(set);
+  saveDraft();
+  render();
+}
+
+function addMajorPart() {
+  const id = uid("part");
+  draft.MAJOR_PARTS.push({
+    id: id, seq: draft.MAJOR_PARTS.length + 1, name: "New Part", group: "Structure", icon: "cartridge",
+    desc: "Short description", info: "Full description of what this part does.",
+    specs: [], options: [{ id: uid("opt"), label: "Standard", note: "", sellers: [{ name: "Company A", price: 0 }] }]
+  });
+  openItems["mp-" + id] = true;
+  saveDraft();
+  render();
+}
+
+function deleteMajorPart(idx) {
+  if (!confirm("Delete this part? This cannot be undone.")) return;
+  draft.MAJOR_PARTS.splice(idx, 1);
+  saveDraft();
+  render();
+}
+
+function addOption(partIdx) {
+  draft.MAJOR_PARTS[partIdx].options.push({ id: uid("opt"), label: "New Option", note: "", sellers: [{ name: "Company A", price: 0 }] });
+  saveDraft();
+  render();
+}
+
+function deleteOption(partIdx, optIdx) {
+  draft.MAJOR_PARTS[partIdx].options.splice(optIdx, 1);
+  saveDraft();
+  render();
+}
+
+function updateOptionField(partIdx, optIdx, field, value) {
+  draft.MAJOR_PARTS[partIdx].options[optIdx][field] = value;
+  saveDraft();
+}
+
+function addSeller(partIdx, optIdx) {
+  draft.MAJOR_PARTS[partIdx].options[optIdx].sellers.push({ name: "Company B", price: 0 });
+  saveDraft();
+  render();
+}
+
+function deleteSeller(partIdx, optIdx, sellerIdx) {
+  draft.MAJOR_PARTS[partIdx].options[optIdx].sellers.splice(sellerIdx, 1);
+  saveDraft();
+  render();
+}
+
+function updateSellerField(partIdx, optIdx, sellerIdx, field, value) {
+  draft.MAJOR_PARTS[partIdx].options[optIdx].sellers[sellerIdx][field] = value;
+  saveDraft();
+}
+
+function minorPartsSectionHtml() {
+  const groupsHtml = draft.MINOR_GROUPS.map(function(g, gi) {
+    const itemsHtml = g.items.map(function(item, ii) {
+      return '' +
+        '<div class="admin-row-2" style="margin-bottom:8px;">' +
+          '<input class="admin-input" value="' + esc(item.name) + '" placeholder="Part name" oninput="updateMinorItemField(' + gi + ', ' + ii + ', \'name\', this.value)" />' +
+          '<div style="display:flex; gap:8px;">' +
+            '<input class="admin-input" value="' + esc(item.note) + '" placeholder="Description" oninput="updateMinorItemField(' + gi + ', ' + ii + ', \'note\', this.value)" />' +
+            '<button class="admin-btn danger small" onclick="deleteMinorItem(' + gi + ', ' + ii + ')">X</button>' +
+          '</div>' +
+        '</div>';
+    }).join("");
+    return '' +
+      '<div class="admin-card">' +
+        '<div class="admin-card-header"><div><p class="admin-card-title">' + esc(g.group) + '</p><p class="admin-card-sub">' + g.items.length + ' item(s)</p></div>' +
+        '<button class="admin-btn secondary small" onclick="addMinorItem(' + gi + ')">+ Add Item</button></div>' +
+        itemsHtml +
+      '</div>';
+  }).join("");
+
+  return '' +
+    '<h2 class="admin-page-title">Minor / Supporting Parts</h2>' +
+    '<p class="admin-page-sub">Small supporting items grouped by category (water-line, electrical, mechanical). Priced together via a flat per-item price in Settings.</p>' +
+    groupsHtml;
+}
+
+function updateMinorItemField(gi, ii, field, value) {
+  draft.MINOR_GROUPS[gi].items[ii][field] = value;
+  saveDraft();
+}
+
+function addMinorItem(gi) {
+  draft.MINOR_GROUPS[gi].items.push({ name: "New Item", note: "Description of what this part does." });
+  saveDraft();
+  render();
+}
+
+function deleteMinorItem(gi, ii) {
+  draft.MINOR_GROUPS[gi].items.splice(ii, 1);
+  saveDraft();
+  render();
+}
+
+function readyMadeSectionHtml() {
+  const itemsHtml = draft.READY_MADE_MODELS.map(function(m, idx) {
+    const key = "rm-" + m.id;
+    const isOpen = !!openItems[key];
+    const iconOptions = Object.keys(ICONS_SNAPSHOT).map(function(k) {
+      return '<option value="' + k + '" ' + (m.icon === k ? 'selected' : '') + '>' + k + '</option>';
+    }).join("");
+    const specsText = (m.specs || []).join("\n");
+    return '' +
+      '<div class="admin-list-item">' +
+        '<div class="admin-list-item-header" onclick="toggleItem(\'' + key + '\')">' +
+          '<div><div class="admin-list-item-title">' + esc(m.name) + '</div><div class="admin-list-item-meta">Rs. ' + m.price + '</div></div>' +
+          '<span class="admin-chevron">' + (isOpen ? '\u2212' : '+') + '</span>' +
+        '</div>' +
+        '<div class="admin-list-item-body ' + (isOpen ? 'open' : '') + '">' +
+          '<label class="admin-field-label">Name*</label><input class="admin-input" value="' + esc(m.name) + '" oninput="updateReadyMadeField(' + idx + ', \'name\', this.value)" />' +
+          '<label class="admin-field-label">Tagline</label><input class="admin-input" value="' + esc(m.tagline) + '" oninput="updateReadyMadeField(' + idx + ', \'tagline\', this.value)" />' +
+          '<label class="admin-field-label">Price (Rs.)</label><input type="number" class="admin-input" value="' + m.price + '" oninput="updateReadyMadeField(' + idx + ', \'price\', parseFloat(this.value)||0)" />' +
+          '<label class="admin-field-label">Specs (one per line)</label><textarea class="admin-textarea" oninput="updateReadyMadeField(' + idx + ', \'specs\', this.value.split(String.fromCharCode(10)).map(function(s){return s.trim();}).filter(Boolean))">' + esc(specsText) + '</textarea>' +
+          '<div class="admin-row-2">' +
+            '<div><label class="admin-field-label">Icon (used if no image URL)</label><select class="admin-select" onchange="updateReadyMadeField(' + idx + ', \'icon\', this.value)">' + iconOptions + '</select></div>' +
+            '<div><label class="admin-field-label">Image URL (optional)</label><input class="admin-input" value="' + esc(m.imageUrl || '') + '" placeholder="https://..." oninput="updateReadyMadeField(' + idx + ', \'imageUrl\', this.value)" /></div>' +
+          '</div>' +
+          '<div class="admin-item-actions"><button class="admin-btn danger small" onclick="deleteReadyMade(' + idx + ')">Delete this model</button></div>' +
+        '</div>' +
+      '</div>';
+  }).join("");
+
+  return '' +
+    '<h2 class="admin-page-title">Ready-Made Models</h2>' +
+    '<p class="admin-page-sub">Pre-built purifier models shown on the "Buy Ready Made" page and featured on Home.</p>' +
+    '<div class="admin-card">' +
+      '<div class="admin-card-header"><div><p class="admin-card-title">All Models (' + draft.READY_MADE_MODELS.length + ')</p></div>' +
+      '<button class="admin-btn" onclick="addReadyMade()">+ Add Model</button></div>' +
+      itemsHtml +
+    '</div>';
+}
+
+function updateReadyMadeField(idx, field, value) {
+  draft.READY_MADE_MODELS[idx][field] = value;
+  saveDraft();
+}
+
+function addReadyMade() {
+  const id = uid("rm");
+  draft.READY_MADE_MODELS.push({ id: id, name: "New Model", tagline: "Tagline here.", price: 0, icon: "cabinet", specs: [] });
+  openItems["rm-" + id] = true;
+  saveDraft();
+  render();
+}
+
+function deleteReadyMade(idx) {
+  if (!confirm("Delete this model?")) return;
+  draft.READY_MADE_MODELS.splice(idx, 1);
+  saveDraft();
+  render();
+}
+
+function servicePackagesSectionHtml() {
+  const itemsHtml = draft.SERVICE_PACKAGES.map(function(pkg, idx) {
+    const key = "pkg-" + pkg.id;
+    const isOpen = !!openItems[key];
+    const servicesText = (pkg.services || []).join("\n");
+    return '' +
+      '<div class="admin-list-item">' +
+        '<div class="admin-list-item-header" onclick="toggleItem(\'' + key + '\')">' +
+          '<div><div class="admin-list-item-title">' + esc(pkg.name) + '</div><div class="admin-list-item-meta">Rs. ' + pkg.price + ' ' + esc(pkg.period) + (pkg.highlight ? ' &middot; highlighted' : '') + '</div></div>' +
+          '<span class="admin-chevron">' + (isOpen ? '\u2212' : '+') + '</span>' +
+        '</div>' +
+        '<div class="admin-list-item-body ' + (isOpen ? 'open' : '') + '">' +
+          '<label class="admin-field-label">Name*</label><input class="admin-input" value="' + esc(pkg.name) + '" oninput="updatePackageField(' + idx + ', \'name\', this.value)" />' +
+          '<label class="admin-field-label">Tagline</label><input class="admin-input" value="' + esc(pkg.tagline) + '" oninput="updatePackageField(' + idx + ', \'tagline\', this.value)" />' +
+          '<div class="admin-row-2">' +
+            '<div><label class="admin-field-label">Price (Rs.)</label><input type="number" class="admin-input" value="' + pkg.price + '" oninput="updatePackageField(' + idx + ', \'price\', parseFloat(this.value)||0)" /></div>' +
+            '<div><label class="admin-field-label">Billing period label</label><input class="admin-input" value="' + esc(pkg.period) + '" oninput="updatePackageField(' + idx + ', \'period\', this.value)" /></div>' +
+          '</div>' +
+          '<label class="admin-field-label">Included services (one per line)</label><textarea class="admin-textarea" oninput="updatePackageField(' + idx + ', \'services\', this.value.split(String.fromCharCode(10)).map(function(s){return s.trim();}).filter(Boolean))">' + esc(servicesText) + '</textarea>' +
+          '<div class="admin-checkbox-row"><input type="checkbox" id="hl_' + idx + '" ' + (pkg.highlight ? 'checked' : '') + ' onchange="updatePackageField(' + idx + ', \'highlight\', this.checked)" /><label for="hl_' + idx + '">Highlight as "Most popular"</label></div>' +
+          '<div class="admin-item-actions"><button class="admin-btn danger small" onclick="deletePackage(' + idx + ')">Delete this package</button></div>' +
+        '</div>' +
+      '</div>';
+  }).join("");
+
+  return '' +
+    '<h2 class="admin-page-title">Yearly Servicing Packages</h2>' +
+    '<p class="admin-page-sub">Subscription plans shown on the Book Servicing page.</p>' +
+    '<div class="admin-card">' +
+      '<div class="admin-card-header"><div><p class="admin-card-title">All Packages (' + draft.SERVICE_PACKAGES.length + ')</p></div>' +
+      '<button class="admin-btn" onclick="addPackage()">+ Add Package</button></div>' +
+      itemsHtml +
+    '</div>';
+}
+
+function updatePackageField(idx, field, value) {
+  draft.SERVICE_PACKAGES[idx][field] = value;
+  saveDraft();
+}
+
+function addPackage() {
+  const id = uid("pkg");
+  draft.SERVICE_PACKAGES.push({ id: id, name: "New Package", price: 0, period: "per year", tagline: "Tagline here.", services: [] });
+  openItems["pkg-" + id] = true;
+  saveDraft();
+  render();
+}
+
+function deletePackage(idx) {
+  if (!confirm("Delete this package?")) return;
+  draft.SERVICE_PACKAGES.splice(idx, 1);
+  saveDraft();
+  render();
+}
+
+function serviceTypesSectionHtml() {
+  const itemsHtml = draft.SERVICE_TYPES.map(function(t, idx) {
+    return '' +
+      '<div class="admin-list-item">' +
+        '<label class="admin-field-label">Label</label><input class="admin-input" value="' + esc(t.label) + '" oninput="updateServiceTypeField(' + idx + ', \'label\', this.value)" />' +
+        '<label class="admin-field-label">Note</label><input class="admin-input" value="' + esc(t.note) + '" oninput="updateServiceTypeField(' + idx + ', \'note\', this.value)" />' +
+        '<div class="admin-item-actions"><button class="admin-btn danger small" onclick="deleteServiceType(' + idx + ')">Delete</button></div>' +
+      '</div>';
+  }).join("");
+
+  return '' +
+    '<h2 class="admin-page-title">One-Time Servicing Types</h2>' +
+    '<p class="admin-page-sub">Options shown when booking a one-time service visit (General Service, Repair, etc).</p>' +
+    '<div class="admin-card">' +
+      '<div class="admin-card-header"><div><p class="admin-card-title">All Types (' + draft.SERVICE_TYPES.length + ')</p></div>' +
+      '<button class="admin-btn" onclick="addServiceType()">+ Add Type</button></div>' +
+      itemsHtml +
+    '</div>';
+}
+
+function updateServiceTypeField(idx, field, value) {
+  draft.SERVICE_TYPES[idx][field] = value;
+  saveDraft();
+}
+
+function addServiceType() {
+  draft.SERVICE_TYPES.push({ id: uid("svc"), label: "New Type", note: "Description here." });
+  saveDraft();
+  render();
+}
+
+function deleteServiceType(idx) {
+  if (!confirm("Delete this service type?")) return;
+  draft.SERVICE_TYPES.splice(idx, 1);
+  saveDraft();
+  render();
+}
+
+function settingsSectionHtml() {
+  return '' +
+    '<h2 class="admin-page-title">Settings</h2>' +
+    '<p class="admin-page-sub">General values used across the storefront.</p>' +
+    '<div class="admin-card">' +
+      '<label class="admin-field-label">Flat price per minor/supporting part (Rs.)</label>' +
+      '<input type="number" class="admin-input" value="' + draft.MINOR_PRICE + '" oninput="draft.MINOR_PRICE = parseFloat(this.value)||0; saveDraft();" style="max-width:200px;" />' +
+      '<p class="admin-card-sub" style="margin-top:8px;">Every minor part (O-rings, connectors, wires, etc.) is priced at this flat rate in the storefront.</p>' +
+    '</div>' +
+    '<div class="admin-card">' +
+      '<p class="admin-card-title">Required Core Parts</p>' +
+      '<p class="admin-card-sub" style="margin-bottom:10px;">These parts must be selected for a build to be considered "ready" for checkout. Manage this per-part from the Major Parts tab (each part has a "Required part" checkbox).</p>' +
+      '<p class="admin-card-sub">Currently required: ' + (draft.REQUIRED_CORE.map(esc).join(", ") || "none") + '</p>' +
+    '</div>';
+}
+
+function iconsBlockSource() {
+  const lines = [];
+  lines.push("const ICONS = {");
+  Object.keys(ICONS_SNAPSHOT).forEach(function(key, i, arr) {
+    const val = JSON.stringify(ICONS_SNAPSHOT[key]);
+    lines.push('  ' + key + ': ' + val + (i < arr.length - 1 ? ',' : ''));
+  });
+  lines.push("};");
+  return lines.join("\n");
+}
+
+function exportDataJs() {
+  const fileContent = [
+    '// ============================================================================',
+    '// AquaClear product & content data',
+    '// ----------------------------------------------------------------------------',
+    '// Generated by admin.html on ' + new Date().toISOString() + '.',
+    '// Replace your repo\'s data.js with this file and commit + push to publish.',
+    '// ============================================================================',
+    '',
+    'const READY_MADE_MODELS = ' + JSON.stringify(draft.READY_MADE_MODELS, null, 2) + ';',
+    '',
+    'const MAJOR_PARTS = ' + JSON.stringify(draft.MAJOR_PARTS, null, 2) + ';',
+    '',
+    'const MINOR_GROUPS = ' + JSON.stringify(draft.MINOR_GROUPS, null, 2) + ';',
+    '',
+    'const MINOR_PRICE = ' + draft.MINOR_PRICE + ';',
+    'const REQUIRED_CORE = ' + JSON.stringify(draft.REQUIRED_CORE) + ';',
+    '',
+    iconsBlockSource(),
+    '',
+    'const SERVICE_TYPES = ' + JSON.stringify(draft.SERVICE_TYPES, null, 2) + ';',
+    '',
+    'const SERVICE_PACKAGES = ' + JSON.stringify(draft.SERVICE_PACKAGES, null, 2) + ';',
+    ''
+  ].join("\n");
+
+  const blob = new Blob([fileContent], { type: "text/javascript" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "data.js";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showBanner("data.js downloaded. Replace the file in your repo and commit + push to publish these changes.");
+}
+
+if (sessionStorage.getItem("ro_admin_authed") === "1") {
+  showAdminShell();
+}
+</script>
+</body>
+</html>

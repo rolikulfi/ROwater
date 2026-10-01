@@ -1,0 +1,3873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Assemble Your RO Purifier</title>
+<style>
+  @font-face {
+    font-family: 'system-display';
+    src: local('Segoe UI Semibold'), local('Arial');
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: #F7F7F5;
+    color: #0F172A;
+  }
+  .display-font {
+    font-family: -apple-system, 'Segoe UI Semibold', Roboto, Helvetica, Arial, sans-serif;
+    letter-spacing: -0.01em;
+  }
+  .topbar {
+    border-bottom: 1px solid #D8DCE1;
+    background: #0F172A;
+    padding: 16px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+  }
+  .topbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .hamburger-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    border: 1px solid #2B3B4E;
+    background: #16233A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+  }
+  .hamburger-btn:hover { background: #1D2E48; }
+  .hamburger-btn span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: #F7F7F5;
+    border-radius: 1px;
+  }
+  .brand-mark {
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 1px;
+    color: #0F172A;
+    background: #1D7A6E;
+    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .topbar-title-wrap { min-width: 0; }
+  h1 {
+    font-weight: 600;
+    font-size: 18px;
+    color: #F7F7F5;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .header-sub {
+    color: #9FB0C3;
+    font-size: 12.5px;
+    margin: 2px 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Nav drawer */
+  .nav-scrim {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.5);
+    z-index: 300;
+  }
+  .nav-scrim.visible { display: block; }
+  .nav-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    max-width: 82vw;
+    background: #0F172A;
+    z-index: 301;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 8px 0 30px rgba(0,0,0,0.25);
+  }
+  .nav-drawer.open { transform: translateX(0); }
+  .nav-drawer-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 18px 16px;
+    border-bottom: 1px solid #22324A;
+  }
+  .nav-drawer-brand { display: flex; align-items: center; gap: 10px; }
+  .nav-drawer-brand-text { color: #F7F7F5; font-weight: 600; font-size: 15px; }
+  .nav-close-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: #16233A;
+    color: #9FB0C3;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-close-btn:hover { background: #1D2E48; color: #F7F7F5; }
+  .nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 10px 10px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    overflow-y: auto;
+  }
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 12px;
+    border-radius: 8px;
+    color: #D7DEE6;
+    font-size: 14.5px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+  }
+  .nav-link:hover { background: #182338; color: #fff; }
+  .nav-link.active { background: #16332E; color: #6FD6C2; }
+  .nav-link-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-link-icon svg { width: 100%; height: 100%; }
+  .nav-soon-tag {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 600;
+    color: #8A96A3;
+    background: #16233A;
+    padding: 2px 7px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .nav-drawer-footer {
+    padding: 14px 18px 18px;
+    border-top: 1px solid #22324A;
+    font-size: 11.5px;
+    color: #6B7B90;
+    line-height: 1.5;
+  }
+  .app-body {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 28px;
+    padding: 28px 24px 80px;
+  }
+  @media (max-width: 860px) {
+    .app-body { grid-template-columns: 1fr; }
+    .summary-sticky { position: static !important; }
+  }
+  @media (max-width: 420px) {
+    .address-form-row { grid-template-columns: 1fr; }
+  }
+  .my-builds-view {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 28px 24px 80px;
+  }
+  .my-builds-header { margin-bottom: 20px; }
+  .my-builds-title { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
+  .my-builds-sub { font-size: 13.5px; color: #8A96A3; margin: 0; line-height: 1.5; }
+  .my-builds-empty {
+    background: #fff;
+    border: 1px dashed #D8DCE1;
+    border-radius: 10px;
+    padding: 36px 24px;
+    text-align: center;
+    color: #8A96A3;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .my-builds-empty a, .back-to-builder-btn {
+    display: inline-block;
+    margin-top: 12px;
+    background: #1D7A6E;
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 7px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .saved-build-card {
+    background: #fff;
+    border: 1px solid #D8DCE1;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .saved-build-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .saved-build-date { font-size: 12px; color: #8A96A3; margin: 0 0 4px; }
+  .saved-build-progress { font-size: 14px; font-weight: 600; color: #0F172A; margin: 0; }
+  .saved-build-total { font-size: 16px; font-weight: 700; color: #1D7A6E; white-space: nowrap; }
+  .saved-build-parts {
+    font-size: 12.5px;
+    color: #3B5169;
+    line-height: 1.6;
+    margin: 0 0 14px;
+  }
+  .saved-build-actions { display: flex; gap: 10px; }
+  .resume-btn {
+    flex: 1;
+    background: #1D7A6E;
+    color: #fff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .delete-build-btn {
+    background: #fff;
+    color: #C4501F;
+    border: 1px solid #EBD3C0;
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .delete-build-btn:hover { background: #FBF2EC; }
+  .rail { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+  .rail-group { display: flex; flex-direction: column; gap: 10px; }
+  .rail-group-label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #3B5169;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #D8DCE1;
+  }
+  .part-card {
+    background: #FFFFFF;
+    border: 1px solid #D8DCE1;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .part-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: transparent;
+    border: none;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+  }
+  .part-row.open { border-left-color: #1D7A6E; }
+  .part-seq {
+    font-weight: 600;
+    font-size: 13px;
+    color: #1D7A6E;
+    width: 24px;
+    flex-shrink: 0;
+  }
+  .part-info { display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0; }
+  .part-name-row { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+  .part-name { font-size: 15px; font-weight: 600; }
+  .optional-tag {
+    font-size: 11px;
+    font-weight: 500;
+    color: #3B5169;
+    background: #EEF1F4;
+    padding: 2px 7px;
+    border-radius: 10px;
+  }
+  .part-status { font-size: 13px; }
+  .chosen-text { color: #1D7A6E; font-weight: 500; }
+  .missing-text { color: #C4501F; font-weight: 500; }
+  .suggested-text { color: #9A6B1F; font-weight: 500; }
+  .empty-text { color: #8A96A3; }
+  .chevron { font-size: 20px; color: #8A96A3; width: 20px; text-align: center; flex-shrink: 0; }
+  .option-panel {
+    border-top: 1px solid #EEF1F4;
+    padding: 14px 16px 16px;
+    background: #FBFBFA;
+    display: none;
+  }
+  .option-panel.visible { display: block; }
+  .part-desc { font-size: 13px; color: #3B5169; margin: 0 0 12px; line-height: 1.5; }
+  .option-list { display: flex; flex-direction: column; gap: 8px; }
+  .option-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #D8DCE1;
+    background: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: inherit;
+    color: inherit;
+    text-align: left;
+    flex: 1;
+    min-width: 0;
+  }
+  .option-btn.active { border-color: #1D7A6E; background: #EAF4F2; }
+  .option-price { font-weight: 600; font-size: 13px; color: #0F172A; }
+  .minor-group-card {
+    background: #FFFFFF;
+    border: 1px solid #D8DCE1;
+    border-radius: 8px;
+    padding: 16px;
+  }
+  .minor-group-title { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+  .minor-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 8px 12px;
+  }
+  .minor-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 13.5px;
+    color: #1F2937;
+    min-width: 0;
+  }
+  .minor-item-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    min-width: 0;
+    flex: 1;
+  }
+  .minor-item-label span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .minor-item input { width: 15px; height: 15px; accent-color: #1D7A6E; flex-shrink: 0; }
+  .minor-info-btn { width: 20px; height: 20px; font-size: 11px; flex-shrink: 0; }
+  .summary-panel { min-width: 0; }
+  .summary-sticky {
+    position: sticky;
+    top: 24px;
+    background: #FFFFFF;
+    border: 1px solid #D8DCE1;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .summary-header { display: flex; justify-content: space-between; align-items: baseline; }
+  .summary-title { font-weight: 600; font-size: 16px; }
+  .summary-count { font-size: 12px; color: #8A96A3; }
+  .progress-track { height: 4px; background: #EEF1F4; border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: #1D7A6E; transition: width 0.3s ease; }
+  .empty-state { font-size: 13.5px; color: #8A96A3; line-height: 1.5; margin: 0; }
+  .summary-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; max-height: 280px; overflow-y: auto; }
+  .summary-item { display: flex; justify-content: space-between; font-size: 13.5px; gap: 8px; }
+  .summary-item-name { color: #1F2937; }
+  .summary-item-seller { color: #8A96A3; font-size: 12px; }
+  .summary-item-price { font-weight: 600; color: #0F172A; flex-shrink: 0; }
+  .warning-box {
+    background: #FBF2EC;
+    border: 1px solid #EBD3C0;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .warning-line { display: flex; gap: 8px; font-size: 12.5px; line-height: 1.5; color: #5A3A22; }
+  .warning-icon {
+    background: #C4501F; color: #fff; width: 16px; height: 16px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+  }
+  .warning-icon-soft {
+    background: #9A6B1F; color: #fff; width: 16px; height: 16px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px;
+  }
+  .total-row { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid #EEF1F4; padding-top: 14px; }
+  .total-label { font-size: 14px; color: #3B5169; }
+  .total-value { font-weight: 700; font-size: 22px; }
+  .cart-btn {
+    width: 100%;
+    padding: 13px 16px;
+    border-radius: 7px;
+    border: none;
+    font-size: 14.5px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .cart-btn.ready { background: #1D7A6E; color: #fff; }
+  .cart-btn.disabled { background: #E5E8EB; color: #9AA5B1; cursor: not-allowed; }
+  .cart-btn.save-later { background: #3B5169; color: #fff; }
+  .save-later-note { font-size: 12px; color: #8A96A3; line-height: 1.5; margin: 8px 0 0; }
+  .ready-note { font-size: 12px; color: #8A96A3; line-height: 1.5; margin: 0; }
+
+  .info-btn {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 1.5px solid #9FB0C3;
+    background: #fff;
+    color: #3B5169;
+    font-size: 11px;
+    font-weight: 700;
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', serif;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+  }
+  .info-btn:hover { background: #EAF4F2; border-color: #1D7A6E; color: #1D7A6E; }
+
+  .option-row { display: flex; align-items: center; gap: 8px; }
+  .option-info-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1.5px solid #9FB0C3;
+    background: #fff;
+    color: #3B5169;
+    font-size: 12px;
+    font-weight: 700;
+    font-style: italic;
+    font-family: Georgia, 'Times New Roman', serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    line-height: 1;
+  }
+  .option-info-btn:hover { background: #EAF4F2; border-color: #1D7A6E; color: #1D7A6E; }
+
+  .option-block { display: flex; flex-direction: column; gap: 8px; }
+  .seller-panel {
+    background: #F0F3F5;
+    border: 1px dashed #C7CFD6;
+    border-radius: 7px;
+    padding: 10px 12px 12px;
+    margin-left: 4px;
+  }
+  .seller-panel-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #8A96A3;
+    margin: 0 0 8px;
+  }
+  .seller-list { display: flex; flex-direction: column; gap: 6px; }
+  .seller-btn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 12px;
+    border-radius: 6px;
+    border: 1px solid #D8DCE1;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: inherit;
+    text-align: left;
+    width: 100%;
+  }
+  .seller-btn.active { border-color: #1D7A6E; background: #EAF4F2; }
+  .seller-name { font-weight: 500; }
+  .seller-price { font-weight: 700; color: #0F172A; }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.visible { display: flex; }
+  .modal-card {
+    background: #fff;
+    border-radius: 12px;
+    max-width: 480px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(15,23,42,0.3);
+  }
+  .modal-image-wrap {
+    background: #F0F3F5;
+    border-radius: 12px 12px 0 0;
+    padding: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-image-wrap svg { width: 96px; height: 96px; }
+  .modal-body { padding: 20px 24px 24px; }
+  .modal-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .modal-title { font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+  .modal-group-tag {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #1D7A6E;
+    background: #EAF4F2;
+    padding: 3px 9px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  .modal-close {
+    background: #F0F3F5;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 16px;
+    color: #3B5169;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-close:hover { background: #E2E7EA; }
+  .modal-desc { font-size: 14px; color: #1F2937; line-height: 1.6; margin: 0 0 16px; }
+  .modal-section-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #8A96A3;
+    margin: 0 0 8px;
+  }
+  .modal-specs {
+    list-style: none;
+    margin: 0 0 4px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .modal-specs li {
+    font-size: 13.5px;
+    color: #1F2937;
+    display: flex;
+    gap: 8px;
+    line-height: 1.5;
+  }
+  .modal-specs li::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #1D7A6E;
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  .mock-signin-form { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+  .mock-signin-label { font-size: 12px; font-weight: 600; color: #3B5169; margin-top: 6px; }
+  .mock-signin-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #D8DCE1;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .mock-signin-submit {
+    margin-top: 14px;
+    background: #1D7A6E;
+    color: #fff;
+    border: none;
+    padding: 11px 16px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  /* Cancellation modal */
+  .cancel-reason-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .cancel-reason-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border: 1px solid #D8DCE1;
+    border-radius: 7px;
+    background: #fff;
+    cursor: pointer;
+    font-size: 13.5px;
+    font-family: inherit;
+    color: #1F2937;
+    text-align: left;
+    width: 100%;
+  }
+  .cancel-reason-btn.active { border-color: #C4501F; background: #FBF2EC; }
+  .cancel-reason-radio {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid #9FB0C3;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .cancel-reason-btn.active .cancel-reason-radio { border-color: #C4501F; }
+  .cancel-reason-btn.active .cancel-reason-radio::after {
+    content: "";
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #C4501F;
+  }
+  .cancel-order-btn {
+    background: #fff;
+    color: #C4501F;
+    border: 1px solid #EBD3C0;
+    padding: 8px 14px;
+    border-radius: 7px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    margin-top: 10px;
+  }
+  .cancel-order-btn:hover { background: #FBF2EC; }
+  .cancellation-note {
+    font-size: 12px;
+    color: #C4501F;
+    margin: 8px 0 0;
+    line-height: 1.5;
+  }
+  .saved-build-source-tag.cancelled { background: #FBF2EC; color: #C4501F; }
+
+  /* About page */
+  .about-paragraph { font-size: 13.5px; color: #1F2937; line-height: 1.7; margin: 0 0 10px; }
+  .about-paragraph:last-child { margin-bottom: 0; }
+  .about-list { margin: 4px 0 0; }
+  .about-values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .about-value-card {
+    background: #F0F3F5;
+    border-radius: 8px;
+    padding: 14px;
+  }
+  .about-value-title { font-size: 13.5px; font-weight: 700; color: #0F172A; margin: 0 0 4px; }
+  .about-value-note { font-size: 12px; color: #3B5169; line-height: 1.5; margin: 0; }
+
+  /* Contact page */
+  .contact-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .contact-info-item .about-paragraph { font-size: 13px; }
+  .faq-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .faq-item { border: 1px solid #EEF1F4; border-radius: 8px; overflow: hidden; }
+  .faq-question {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #0F172A;
+    text-align: left;
+    font-family: inherit;
+  }
+  .faq-chevron { color: #8A96A3; font-size: 16px; flex-shrink: 0; }
+  .faq-answer { font-size: 13px; color: #3B5169; line-height: 1.6; padding: 0 14px 14px; margin: 0; }
+  .contact-form-success {
+    background: #EAF4F2;
+    border: 1px solid #BFE0DA;
+    color: #1D7A6E;
+    font-size: 12.5px;
+    padding: 9px 12px;
+    border-radius: 7px;
+    margin: 0 0 12px;
+  }
+
+  /* Home page */
+  .home-view {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+  }
+  .home-hero {
+    padding: 44px 8px 36px;
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .home-hero-eyebrow {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #1D7A6E;
+    background: #EAF4F2;
+    padding: 4px 12px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+  }
+  .home-hero-title {
+    font-size: 30px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 12px;
+    letter-spacing: -0.01em;
+  }
+  .home-hero-sub {
+    font-size: 14.5px;
+    color: #3B5169;
+    line-height: 1.6;
+    margin: 0 0 24px;
+  }
+  .home-hero-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .home-hero-btn { max-width: 260px; }
+  .home-hero-link { padding-top: 0; }
+
+  .home-section { margin-top: 40px; }
+  .home-section-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .home-see-all { padding: 0; font-size: 12.5px; }
+
+  .home-cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+    margin-top: 10px;
+  }
+  .home-cat-card {
+    background: #fff;
+    border: 1px solid #D8DCE1;
+    border-radius: 10px;
+    padding: 18px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .home-cat-card:hover { border-color: #1D7A6E; background: #FBFEFD; }
+  .home-cat-icon {
+    width: 40px;
+    height: 40px;
+    background: #EAF4F2;
+    color: #1D7A6E;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+  }
+  .home-cat-icon svg { width: 20px; height: 20px; }
+  .home-cat-label { font-size: 13.5px; font-weight: 700; color: #0F172A; }
+  .home-cat-note { font-size: 11.5px; color: #8A96A3; line-height: 1.4; }
+
+  .home-trust-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-top: 10px;
+  }
+  .home-trust-card {
+    background: #F0F3F5;
+    border-radius: 10px;
+    padding: 16px;
+  }
+  .home-trust-icon {
+    width: 32px;
+    height: 32px;
+    color: #1D7A6E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  .home-trust-icon svg { width: 20px; height: 20px; }
+  .home-trust-title { font-size: 13.5px; font-weight: 700; color: #0F172A; margin: 0 0 4px; }
+  .home-trust-note { font-size: 12px; color: #3B5169; line-height: 1.5; margin: 0; }
+
+  .home-cta-banner {
+    margin-top: 44px;
+    background: #0F172A;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .home-cta-title { font-size: 16px; font-weight: 700; color: #F7F7F5; margin: 0 0 4px; }
+  .home-cta-note { font-size: 12.5px; color: #9FB0C3; margin: 0; }
+  .home-cta-btn { width: auto; padding: 12px 22px; flex-shrink: 0; }
+
+  @media (max-width: 480px) {
+    .home-hero-title { font-size: 24px; }
+    .home-cta-banner { flex-direction: column; align-items: flex-start; }
+    .home-cta-btn { width: 100%; }
+  }
+
+  /* Nav drawer account section */
+  .nav-account-section {
+    padding: 12px 14px;
+    margin: 6px 10px 4px;
+    border-radius: 8px;
+    background: #16233A;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-account-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #1D7A6E;
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .nav-account-info { min-width: 0; flex: 1; }
+  .nav-account-name { color: #F7F7F5; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nav-account-email { color: #8A96A3; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nav-signout-btn {
+    background: transparent;
+    border: 1px solid #2B3B4E;
+    color: #9FB0C3;
+    font-size: 11px;
+    padding: 5px 9px;
+    border-radius: 6px;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: inherit;
+  }
+  .nav-signout-btn:hover { background: #1D2E48; color: #fff; }
+  .nav-signin-btn {
+    margin: 6px 10px 4px;
+    background: #16233A;
+    border: 1px solid #2B3B4E;
+    color: #D7DEE6;
+    font-size: 13.5px;
+    font-weight: 500;
+    padding: 11px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: inherit;
+  }
+  .nav-signin-btn:hover { background: #1D2E48; }
+
+  /* Save destination toggle (on the builder summary) */
+  .save-destination-toggle {
+    display: flex;
+    gap: 6px;
+    background: #F0F3F5;
+    border-radius: 8px;
+    padding: 4px;
+    margin-bottom: 10px;
+  }
+  .save-dest-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #3B5169;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .save-dest-btn.active { background: #fff; color: #0F172A; box-shadow: 0 1px 3px rgba(15,23,42,0.12); }
+
+  /* My Builds source tabs */
+  .my-builds-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+  .my-builds-tab {
+    background: #fff;
+    border: 1px solid #D8DCE1;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #3B5169;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .my-builds-tab.active { background: #0F172A; color: #fff; border-color: #0F172A; }
+  .saved-build-source-tag {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 2px 7px;
+    border-radius: 8px;
+    margin-left: 8px;
+  }
+  .saved-build-source-tag.browser { background: #EEF1F4; color: #3B5169; }
+  .saved-build-source-tag.google { background: #EAF4F2; color: #1D7A6E; }
+
+  /* Add-to-cart confirmation */
+  .added-confirm {
+    text-align: center;
+    background: #EAF4F2;
+    color: #1D7A6E;
+    font-weight: 600;
+    font-size: 13.5px;
+    padding: 10px;
+    border-radius: 7px;
+    margin-bottom: 10px;
+  }
+  .cart-btn.go-to-cart { background: #0F172A; color: #fff; }
+  .back-link-btn {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #3B5169;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 12px 0 0;
+    cursor: pointer;
+    text-align: center;
+    font-family: inherit;
+  }
+  .back-link-btn:hover { color: #0F172A; text-decoration: underline; }
+
+  /* Checkout steps bar */
+  .checkout-steps {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+  .checkout-step {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #9AA5B1;
+    padding: 5px 10px;
+    border-radius: 14px;
+    background: #EEF1F4;
+  }
+  .checkout-step.active { background: #0F172A; color: #fff; }
+  .checkout-step.done { background: #EAF4F2; color: #1D7A6E; }
+  .checkout-step-sep { color: #C7CFD6; font-size: 13px; }
+
+  .checkout-card {
+    background: #fff;
+    border: 1px solid #D8DCE1;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+  .cart-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #EEF1F4;
+  }
+  .cart-item-row:last-of-type { border-bottom: none; }
+  .cart-item-name { font-size: 14px; font-weight: 600; color: #0F172A; }
+  .cart-item-sub { font-size: 12px; color: #8A96A3; margin-top: 2px; }
+  .cart-item-price { font-size: 14px; font-weight: 700; color: #0F172A; white-space: nowrap; }
+  .cart-item-price-col { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .cart-item-remove {
+    background: none;
+    border: none;
+    color: #C4501F;
+    font-size: 11.5px;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+  }
+  .cart-item-remove:hover { text-decoration: underline; }
+  .cart-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 14px;
+    margin-top: 6px;
+    border-top: 1px solid #D8DCE1;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .cart-total-value { font-size: 19px; font-weight: 700; color: #1D7A6E; }
+
+  /* Address form */
+  .address-form-error {
+    background: #FBF2EC;
+    border: 1px solid #EBD3C0;
+    color: #5A3A22;
+    font-size: 12.5px;
+    padding: 9px 12px;
+    border-radius: 7px;
+    margin: 0 0 12px;
+  }
+  .address-form { display: flex; flex-direction: column; gap: 4px; }
+  .address-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* Payment methods */
+  .payment-method-list { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+  .payment-method-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    border: 1px solid #D8DCE1;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    width: 100%;
+  }
+  .payment-method-btn.active { border-color: #1D7A6E; background: #EAF4F2; }
+  .payment-method-radio {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid #9FB0C3;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .payment-method-radio.checked { border-color: #1D7A6E; }
+  .payment-method-radio.checked::after {
+    content: "";
+    position: absolute;
+    top: 3px; left: 3px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #1D7A6E;
+  }
+  .payment-method-text { display: flex; flex-direction: column; gap: 2px; }
+  .payment-method-label { font-size: 14px; font-weight: 600; color: #0F172A; }
+  .payment-method-note { font-size: 12px; color: #8A96A3; }
+
+  /* Order confirmation */
+  .order-confirm-wrap { max-width: 480px; margin: 0 auto; }
+  .order-confirm-tick {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #1D7A6E;
+    color: #fff;
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+  }
+  .order-confirm-address { font-size: 13.5px; color: #1F2937; line-height: 1.6; margin: 0; }
+
+  /* Catalog pages: Buy Ready Made / Buy Parts Only */
+  .catalog-view { max-width: 900px; }
+  .catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .model-card {
+    background: #fff;
+    border: 1px solid #D8DCE1;
+    border-radius: 10px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .model-card-icon {
+    width: 44px;
+    height: 44px;
+    background: #F0F3F5;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .model-card-icon svg { width: 26px; height: 26px; }
+  .model-card-name { font-size: 15.5px; font-weight: 700; margin: 0; }
+  .model-card-tagline { font-size: 12.5px; color: #8A96A3; margin: 0; line-height: 1.5; }
+  .model-card-specs {
+    list-style: none;
+    margin: 4px 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .model-card-specs li {
+    font-size: 12.5px;
+    color: #1F2937;
+    display: flex;
+    gap: 7px;
+    line-height: 1.45;
+  }
+  .model-card-specs li::before {
+    content: "";
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #1D7A6E;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .model-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid #EEF1F4;
+  }
+  .model-card-price { font-size: 17px; font-weight: 700; color: #0F172A; }
+  .model-add-btn {
+    background: #1D7A6E;
+    color: #fff;
+    border: none;
+    padding: 9px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .model-add-btn.added { background: #0F172A; }
+
+  /* Servicing packages */
+  .package-grid { margin-bottom: 8px; }
+  .package-card {
+    background: #fff;
+    border: 1px solid #D8DCE1;
+    border-radius: 10px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+  }
+  .package-card.highlight { border-color: #1D7A6E; box-shadow: 0 0 0 1px #1D7A6E; }
+  .package-badge {
+    position: absolute;
+    top: -10px;
+    right: 14px;
+    background: #1D7A6E;
+    color: #fff;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 3px 9px;
+    border-radius: 10px;
+  }
+  .package-name { font-size: 16px; font-weight: 700; margin: 0; }
+  .package-tagline { font-size: 12.5px; color: #8A96A3; margin: 0; line-height: 1.5; }
+  .package-price-row { display: flex; align-items: baseline; gap: 6px; margin: 4px 0; }
+  .package-price { font-size: 22px; font-weight: 700; color: #0F172A; }
+  .package-period { font-size: 12px; color: #8A96A3; }
+  .package-services { margin: 4px 0 8px; }
+  .package-subscribe-btn { width: 100%; padding: 10px; font-size: 13.5px; }
+
+  /* Auto-renewal toggle */
+  .auto-renew-toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .auto-renew-title { font-size: 14px; font-weight: 700; color: #0F172A; margin: 0 0 4px; }
+  .auto-renew-note { font-size: 12px; color: #8A96A3; line-height: 1.5; margin: 0; }
+  .auto-renew-demo-note { font-size: 11.5px; color: #9AA5B1; font-style: italic; margin: 8px 0 0; }
+  .toggle-switch {
+    width: 44px;
+    height: 24px;
+    border-radius: 12px;
+    background: #D8DCE1;
+    border: none;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+  }
+  .toggle-switch.on { background: #1D7A6E; }
+  .toggle-knob {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fff;
+    transition: left 0.18s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+  .toggle-switch.on .toggle-knob { left: 22px; }
+
+  .sub-package-summary { border-color: #1D7A6E; }
+  .sub-package-name { font-size: 15px; font-weight: 700; color: #0F172A; margin: 0 0 8px; }
+
+  /* Parts-only catalog */
+  .parts-catalog-group { margin-bottom: 22px; }
+  .parts-catalog-group-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #3B5169;
+    margin: 0 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #D8DCE1;
+  }
+  .part-catalog-card {
+    background: #fff;
+    border: 1px solid #D8DCE1;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .part-catalog-name-row { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; }
+  .part-catalog-name { font-size: 14.5px; font-weight: 700; margin: 0; }
+  .part-catalog-options { display: flex; flex-direction: column; gap: 10px; }
+  .part-catalog-option-block { display: flex; align-items: flex-start; gap: 8px; }
+  .part-catalog-option-group { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
+  .part-catalog-option-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border: 1px solid #EEF1F4;
+    border-radius: 7px;
+    flex-wrap: wrap;
+  }
+  .part-catalog-option-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .part-catalog-option-label { font-size: 13px; font-weight: 600; color: #0F172A; }
+  .part-catalog-option-seller { font-size: 11.5px; color: #8A96A3; }
+  .part-catalog-option-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .part-catalog-price { font-size: 13.5px; font-weight: 700; color: #0F172A; }
+  .part-catalog-add-btn {
+    background: #1D7A6E;
+    color: #fff;
+    border: none;
+    padding: 7px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .part-catalog-add-btn.added { background: #0F172A; }
+  .sticky-mini-cart {
+    position: sticky;
+    bottom: 12px;
+    background: #0F172A;
+    color: #fff;
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 20px;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.25);
+  }
+  .sticky-mini-cart-text { font-size: 13px; }
+  .sticky-mini-cart-btn {
+    background: #1D7A6E;
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 7px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="hamburger-btn" onclick="openNavDrawer()" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="brand-mark">RO</div>
+    <div class="topbar-title-wrap">
+      <h1>Assemble your purifier</h1>
+      <p class="header-sub">Build it part by part, in flow order.</p>
+    </div>
+  </div>
+</header>
+
+<div class="nav-scrim" id="navScrim" onclick="closeNavDrawer()"></div>
+<nav class="nav-drawer" id="navDrawer" aria-hidden="true">
+  <div class="nav-drawer-header">
+    <div class="nav-drawer-brand">
+      <div class="brand-mark">RO</div>
+      <span class="nav-drawer-brand-text">RO Configurator</span>
+    </div>
+    <button class="nav-close-btn" onclick="closeNavDrawer()" aria-label="Close menu">✕</button>
+  </div>
+  <div id="navAccountSection"></div>
+  <ul class="nav-links" id="navLinks"></ul>
+  <div class="nav-drawer-footer">More pages will be added here as the app grows.</div>
+</nav>
+
+<div class="home-view" id="homeView"></div>
+
+<div class="app-body" id="appBody" style="display:none;">
+  <div class="rail" id="rail"></div>
+  <div class="summary-panel">
+    <div class="summary-sticky" id="summary"></div>
+  </div>
+</div>
+
+<div class="my-builds-view" id="myBuildsView" style="display:none;"></div>
+
+<div class="my-builds-view" id="cartView" style="display:none;"></div>
+
+<div class="my-builds-view" id="orderHistoryView" style="display:none;"></div>
+
+<div class="my-builds-view catalog-view" id="readyMadeView" style="display:none;"></div>
+
+<div class="my-builds-view catalog-view" id="partsOnlyView" style="display:none;"></div>
+
+<div class="my-builds-view" id="bookServicingView" style="display:none;"></div>
+
+<div class="my-builds-view" id="subscriptionCheckoutView" style="display:none;"></div>
+
+<div class="my-builds-view" id="aboutView" style="display:none;"></div>
+
+<div class="my-builds-view" id="contactView" style="display:none;"></div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this) closeInfoModal()">
+  <div class="modal-card" id="modalCard"></div>
+</div>
+
+<script src="data.js"></script>
+<script>
+// Guard: if data.js failed to load (e.g. it wasn't kept in the same folder as
+// this file), fail loudly with a visible message instead of a blank screen.
+if (typeof MAJOR_PARTS === "undefined" || typeof READY_MADE_MODELS === "undefined" || typeof ICONS === "undefined") {
+  document.body.innerHTML =
+    '<div style="max-width:480px;margin:80px auto;padding:24px;font-family:sans-serif;' +
+    'background:#FBF2EC;border:1px solid #EBD3C0;border-radius:10px;color:#5A3A22;">' +
+    '<h2 style="margin-top:0;">Could not load data.js</h2>' +
+    '<p>This page needs <code>data.js</code> to be in the <strong>same folder</strong> as ' +
+    '<code>index.html</code>. If you downloaded these files separately, make sure ' +
+    '<code>index.html</code>, <code>admin.html</code> and <code>data.js</code> all sit together ' +
+    'in the same folder before opening this page.</p>' +
+    '<p>Check your browser\'s developer console (F12) for the exact error if this persists.</p>' +
+    '</div>';
+  throw new Error("data.js not loaded — aborting index.html initialization.");
+}
+
+// ---------------------------------------------------------------------------
+// STATE
+// ---------------------------------------------------------------------------
+const state = {
+  selections: {},   // partId -> optionId
+  minorSelected: {},// itemName -> bool
+  openPart: MAJOR_PARTS[0].id,
+  added: false,
+  navOpen: false,
+  savedJustNow: false,
+  view: "home", // "home" | "builder" | "myBuilds" | "cart"
+  googleUser: null, // null when signed out, otherwise { email, name }
+  saveDestination: "browser", // "browser" | "google" — where the next save goes
+  activeBuildId: null,       // id of the saved build currently loaded, if any
+  activeBuildDestination: null, // "browser" | "google" — where that saved build lives
+  checkoutStep: "cart", // "cart" | "address" | "payment" | "confirmation"
+  deliveryAddress: null, // filled in during checkout
+  paymentMethod: "card", // "card" | "upi" | "cod"
+  lastOrder: null,
+};
+
+// ---------------------------------------------------------------------------
+// SAVED BUILDS STORAGE
+//
+// Two save destinations are supported:
+//   1. "browser"  — always available, tied only to this device/browser.
+//   2. "google"   — intended to sync a signed-in Google user's builds across
+//                   devices. Real cross-device sync needs a backend (e.g.
+//                   Google Identity Services for login + a database or
+//                   Google Drive API for storage), which isn't wired up yet.
+//
+// TODO (when ready to go live with Google):
+//   - Replace mockGoogleSignIn() with real Google Identity Services sign-in.
+//   - Replace the localStorage read/write below for "google" saves with
+//     real API calls to your backend (or Google Drive AppData), keyed by
+//     the signed-in user's account id.
+// For now, "google" saves are still physically kept in this browser's
+// localStorage, just stored under a separate key per email, so the two
+// destinations behave distinctly in the UI ahead of the real integration.
+// ---------------------------------------------------------------------------
+
+const BROWSER_BUILDS_KEY = "ro_configurator_saved_builds_browser";
+const GOOGLE_USER_KEY = "ro_configurator_mock_google_user";
+
+function googleBuildsKey(email) {
+  return "ro_configurator_saved_builds_google_" + email.toLowerCase();
+}
+
+function loadSavedBuilds(destination) {
+  const key = destination === "google" && state.googleUser
+    ? googleBuildsKey(state.googleUser.email)
+    : BROWSER_BUILDS_KEY;
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function writeSavedBuilds(destination, builds) {
+  const key = destination === "google" && state.googleUser
+    ? googleBuildsKey(state.googleUser.email)
+    : BROWSER_BUILDS_KEY;
+  try {
+    localStorage.setItem(key, JSON.stringify(builds));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function loadGoogleUser() {
+  try {
+    const raw = localStorage.getItem(GOOGLE_USER_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function persistGoogleUser(user) {
+  try {
+    if (user) localStorage.setItem(GOOGLE_USER_KEY, JSON.stringify(user));
+    else localStorage.removeItem(GOOGLE_USER_KEY);
+  } catch (e) { /* ignore */ }
+}
+
+function buildSummaryForSave(destination, existingId) {
+  const chosenParts = MAJOR_PARTS.filter((p) => state.selections[p.id]);
+  const total = chosenParts.reduce((sum, p) => {
+    const info = getChosenOptionAndSeller(p);
+    return sum + (info ? info.seller.price : 0);
+  }, 0) + Object.values(state.minorSelected).filter(Boolean).length * MINOR_PRICE;
+  return {
+    id: existingId || ("build_" + Date.now()),
+    savedAt: new Date().toISOString(),
+    savedTo: destination, // "browser" | "google"
+    selections: JSON.parse(JSON.stringify(state.selections)),
+    minorSelected: JSON.parse(JSON.stringify(state.minorSelected)),
+    partsCount: chosenParts.length,
+    totalPartsCount: MAJOR_PARTS.length,
+    total: total,
+    partNames: chosenParts.map((p) => p.name),
+  };
+}
+
+function saveBuildForLater() {
+  const destination = state.saveDestination === "google" && state.googleUser ? "google" : "browser";
+  const builds = loadSavedBuilds(destination);
+
+  // If a build from this same destination is already active (either resumed
+  // from My Builds, or saved earlier in this session), update it in place
+  // instead of creating a duplicate entry.
+  const existingIndex = state.activeBuildId && state.activeBuildDestination === destination
+    ? builds.findIndex((x) => x.id === state.activeBuildId)
+    : -1;
+
+  if (existingIndex !== -1) {
+    builds[existingIndex] = buildSummaryForSave(destination, state.activeBuildId);
+  } else {
+    const newBuild = buildSummaryForSave(destination);
+    builds.unshift(newBuild);
+    state.activeBuildId = newBuild.id;
+    state.activeBuildDestination = destination;
+  }
+
+  const ok = writeSavedBuilds(destination, builds);
+  if (ok) {
+    state.savedJustNow = true;
+    render();
+    setTimeout(() => { state.savedJustNow = false; render(); }, 3500);
+  }
+}
+
+function resumeBuild(buildId, destination) {
+  const builds = loadSavedBuilds(destination);
+  const b = builds.find((x) => x.id === buildId);
+  if (!b) return;
+  state.selections = JSON.parse(JSON.stringify(b.selections));
+  state.minorSelected = JSON.parse(JSON.stringify(b.minorSelected));
+  state.added = false;
+  state.view = "builder";
+  state.activeBuildId = b.id;
+  state.activeBuildDestination = destination;
+  state.saveDestination = destination;
+  closeNavDrawer();
+  switchView();
+  render();
+  renderNav();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function deleteSavedBuild(buildId, destination, evt) {
+  if (evt) evt.stopPropagation();
+  const builds = loadSavedBuilds(destination).filter((x) => x.id !== buildId);
+  writeSavedBuilds(destination, builds);
+  if (state.activeBuildId === buildId && state.activeBuildDestination === destination) {
+    state.activeBuildId = null;
+    state.activeBuildDestination = null;
+  }
+  renderMyBuilds();
+}
+
+function formatSavedDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) +
+    " · " + d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+}
+
+// ---------------------------------------------------------------------------
+// MOCK GOOGLE SIGN-IN
+// TODO: replace this whole block with real Google Identity Services:
+//   https://developers.google.com/identity/gsi/web
+// This placeholder just lets the UI/UX for account-based save be tested
+// before real OAuth credentials exist.
+// ---------------------------------------------------------------------------
+
+function openMockGoogleSignIn() {
+  document.getElementById("modalCard").innerHTML = `
+    <div class="modal-body" style="padding-top:24px;">
+      <div class="modal-header-row">
+        <div>
+          <span class="modal-group-tag">Placeholder</span>
+          <h3 class="modal-title">Sign in with Google</h3>
+        </div>
+        <button class="modal-close" onclick="closeInfoModal()" aria-label="Close">✕</button>
+      </div>
+      <p class="modal-desc">Real Google sign-in isn't connected yet. For now, enter a name and email to simulate a signed-in account — this lets you test saving builds to an "account" separately from plain browser storage.</p>
+      <div class="mock-signin-form">
+        <label class="mock-signin-label">Name</label>
+        <input type="text" id="mockGoogleName" class="mock-signin-input" placeholder="e.g. Priya Sharma" />
+        <label class="mock-signin-label">Email</label>
+        <input type="email" id="mockGoogleEmail" class="mock-signin-input" placeholder="e.g. priya@gmail.com" />
+        <button class="mock-signin-submit" onclick="completeMockGoogleSignIn()">Continue</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("modalOverlay").classList.add("visible");
+}
+
+function completeMockGoogleSignIn() {
+  const nameEl = document.getElementById("mockGoogleName");
+  const emailEl = document.getElementById("mockGoogleEmail");
+  const name = (nameEl && nameEl.value.trim()) || "";
+  const email = (emailEl && emailEl.value.trim()) || "";
+  if (!email) {
+    if (emailEl) emailEl.style.borderColor = "#C4501F";
+    return;
+  }
+  const user = { name: name || email.split("@")[0], email };
+  state.googleUser = user;
+  state.saveDestination = "google";
+  persistGoogleUser(user);
+  closeInfoModal();
+  render();
+  renderNav();
+  if (state.view === "myBuilds") renderMyBuilds();
+}
+
+function signOutGoogle() {
+  state.googleUser = null;
+  state.saveDestination = "browser";
+  persistGoogleUser(null);
+  render();
+  renderNav();
+  if (state.view === "myBuilds") renderMyBuilds();
+}
+
+function setSaveDestination(dest) {
+  if (dest === "google" && !state.googleUser) {
+    openMockGoogleSignIn();
+    return;
+  }
+  state.saveDestination = dest;
+  render();
+}
+
+const NAV_LINKS = [
+  { label: "Home", active: true, icon: "home" },
+  { label: "Build Your Purifier", active: false, icon: "wrench", comingSoon: false },
+  { label: "My Builds", active: false, icon: "list", comingSoon: false },
+  { label: "Buy Ready Made", active: false, icon: "box", comingSoon: false },
+  { label: "Buy Parts Only", active: false, icon: "wrench2", comingSoon: false },
+  { label: "Cart", active: false, icon: "cart", comingSoon: false },
+  { label: "Order History", active: false, icon: "clock", comingSoon: false },
+  { label: "Book Servicing", active: false, icon: "calendar", comingSoon: false },
+  { label: "About", active: false, icon: "info", comingSoon: false },
+  { label: "Contact / Support", active: false, icon: "chat", comingSoon: false },
+];
+
+const NAV_ICONS = {
+  home: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 11.5L12 4l8 7.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 10v9a1 1 0 0 0 1 1h3v-6h4v6h3a1 1 0 0 0 1-1v-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  wrench: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2-2 2.5-2.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+  list: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="8" y1="6" x2="20" y2="6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="12" x2="20" y2="12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="18" x2="20" y2="18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="4" cy="6" r="1.3" fill="currentColor"/><circle cx="4" cy="12" r="1.3" fill="currentColor"/><circle cx="4" cy="18" r="1.3" fill="currentColor"/></svg>`,
+  cart: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="20" r="1.4" fill="currentColor"/><circle cx="18" cy="20" r="1.4" fill="currentColor"/><path d="M2 3h2l2.4 12.2a2 2 0 0 0 2 1.6h8.6a2 2 0 0 0 2-1.6L21 7H6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  clock: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  calendar: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3.5" y="5" width="17" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><line x1="3.5" y1="10" x2="20.5" y2="10" stroke="currentColor" stroke-width="1.8"/><line x1="8" y1="3" x2="8" y2="7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="16" y1="3" x2="16" y2="7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8.5" cy="14.5" r="1.1" fill="currentColor"/><circle cx="12.5" cy="14.5" r="1.1" fill="currentColor"/><circle cx="16.5" cy="14.5" r="1.1" fill="currentColor"/></svg>`,
+  info: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="11" x2="12" y2="16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="8" r="1" fill="currentColor"/></svg>`,
+  chat: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16v10H8l-4 4V5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>`,
+  box: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8l9-5 9 5-9 5-9-5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M3 8v8l9 5 9-5V8" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 13v8" stroke="currentColor" stroke-width="1.8"/></svg>`,
+  wrench2: `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="7" cy="7" r="3" stroke="currentColor" stroke-width="1.8"/><circle cx="17" cy="17" r="3" stroke="currentColor" stroke-width="1.8"/><line x1="9.1" y1="9.1" x2="14.9" y2="14.9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+};
+
+function openNavDrawer() {
+  state.navOpen = true;
+  document.getElementById("navDrawer").classList.add("open");
+  document.getElementById("navScrim").classList.add("visible");
+  document.getElementById("navDrawer").setAttribute("aria-hidden", "false");
+}
+
+function closeNavDrawer() {
+  state.navOpen = false;
+  document.getElementById("navDrawer").classList.remove("open");
+  document.getElementById("navScrim").classList.remove("visible");
+  document.getElementById("navDrawer").setAttribute("aria-hidden", "true");
+}
+
+function navLinkClick(label) {
+  if (label === "My Builds") {
+    state.view = "myBuilds";
+    closeNavDrawer();
+    switchView();
+    renderMyBuilds();
+    renderNav();
+    return;
+  }
+  if (label === "Buy Ready Made") {
+    state.view = "readyMade";
+    closeNavDrawer();
+    switchView();
+    renderReadyMade();
+    renderNav();
+    return;
+  }
+  if (label === "Buy Parts Only") {
+    state.view = "partsOnly";
+    closeNavDrawer();
+    switchView();
+    renderPartsOnly();
+    renderNav();
+    return;
+  }
+  if (label === "Cart") {
+    goToCart();
+    closeNavDrawer();
+    return;
+  }
+  if (label === "Order History") {
+    state.view = "orderHistory";
+    closeNavDrawer();
+    switchView();
+    renderOrderHistory();
+    renderNav();
+    return;
+  }
+  if (label === "Book Servicing") {
+    state.view = "bookServicing";
+    closeNavDrawer();
+    switchView();
+    renderBookServicing();
+    renderNav();
+    return;
+  }
+  if (label === "About") {
+    state.view = "about";
+    closeNavDrawer();
+    switchView();
+    renderAbout();
+    renderNav();
+    return;
+  }
+  if (label === "Contact / Support") {
+    state.view = "contact";
+    closeNavDrawer();
+    switchView();
+    renderContact();
+    renderNav();
+    return;
+  }
+  if (label === "Home") {
+    state.view = "home";
+    closeNavDrawer();
+    switchView();
+    renderHome();
+    renderNav();
+    return;
+  }
+  if (label === "Build Your Purifier") {
+    state.view = "builder";
+    closeNavDrawer();
+    switchView();
+    renderNav();
+    return;
+  }
+  closeNavDrawer();
+}
+
+function switchView() {
+  document.getElementById("homeView").style.display = state.view === "home" ? "block" : "none";
+  document.getElementById("appBody").style.display = state.view === "builder" ? "grid" : "none";
+  document.getElementById("myBuildsView").style.display = state.view === "myBuilds" ? "block" : "none";
+  document.getElementById("cartView").style.display = state.view === "cart" ? "block" : "none";
+  document.getElementById("orderHistoryView").style.display = state.view === "orderHistory" ? "block" : "none";
+  document.getElementById("readyMadeView").style.display = state.view === "readyMade" ? "block" : "none";
+  document.getElementById("partsOnlyView").style.display = state.view === "partsOnly" ? "block" : "none";
+  document.getElementById("bookServicingView").style.display = state.view === "bookServicing" ? "block" : "none";
+  document.getElementById("subscriptionCheckoutView").style.display = state.view === "subscriptionCheckout" ? "block" : "none";
+  document.getElementById("aboutView").style.display = state.view === "about" ? "block" : "none";
+  document.getElementById("contactView").style.display = state.view === "contact" ? "block" : "none";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderNav() {
+  const html = NAV_LINKS.map((link) => {
+    const icon = NAV_ICONS[link.icon] || NAV_ICONS.info;
+    const isCurrent = (state.view === "home" && link.label === "Home") ||
+                       (state.view === "builder" && link.label === "Build Your Purifier") ||
+                       (state.view === "myBuilds" && link.label === "My Builds") ||
+                       (state.view === "cart" && link.label === "Cart") ||
+                       (state.view === "orderHistory" && link.label === "Order History") ||
+                       (state.view === "readyMade" && link.label === "Buy Ready Made") ||
+                       (state.view === "partsOnly" && link.label === "Buy Parts Only") ||
+                       (state.view === "bookServicing" && link.label === "Book Servicing") ||
+                       (state.view === "about" && link.label === "About") ||
+                       (state.view === "contact" && link.label === "Contact / Support");
+    const activeClass = isCurrent ? "active" : "";
+    return `
+      <li>
+        <button class="nav-link ${activeClass}" onclick="navLinkClick('${link.label.replace(/'/g, "\\'")}')">
+          <span class="nav-link-icon">${icon}</span>
+          <span>${esc(link.label)}</span>
+          ${link.comingSoon ? '<span class="nav-soon-tag">soon</span>' : ''}
+        </button>
+      </li>
+    `;
+  }).join("");
+  document.getElementById("navLinks").innerHTML = html;
+
+  const accountHtml = state.googleUser
+    ? `
+      <div class="nav-account-section">
+        <div class="nav-account-avatar">${esc((state.googleUser.name || state.googleUser.email).charAt(0).toUpperCase())}</div>
+        <div class="nav-account-info">
+          <div class="nav-account-name">${esc(state.googleUser.name)}</div>
+          <div class="nav-account-email">${esc(state.googleUser.email)}</div>
+        </div>
+        <button class="nav-signout-btn" onclick="signOutGoogle()">Sign out</button>
+      </div>
+    `
+    : `
+      <button class="nav-signin-btn" onclick="openMockGoogleSignIn()">
+        <span class="nav-link-icon">${NAV_ICONS.info}</span>
+        <span>Sign in with Google</span>
+      </button>
+    `;
+  document.getElementById("navAccountSection").innerHTML = accountHtml;
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && state.navOpen) closeNavDrawer();
+});
+
+function currency(n) {
+  return "₹" + n.toLocaleString("en-IN");
+}
+
+function partName(id) {
+  const found = MAJOR_PARTS.find((p) => p.id === id);
+  return found ? found.name : id;
+}
+
+function groupParts() {
+  const g = {};
+  const order = [];
+  MAJOR_PARTS.forEach((p) => {
+    if (!g[p.group]) { g[p.group] = []; order.push(p.group); }
+    g[p.group].push(p);
+  });
+  return { g, order };
+}
+
+function findOption(partId, optionId) {
+  const p = MAJOR_PARTS.find((x) => x.id === partId);
+  if (!p) return null;
+  return p.options.find((o) => o.id === optionId) || null;
+}
+
+function cheapestSeller(option) {
+  return option.sellers.slice().sort((a, b) => a.price - b.price)[0];
+}
+
+function selectOption(partId, optionId) {
+  const current = state.selections[partId];
+  if (current && current.optionId === optionId) {
+    delete state.selections[partId];
+  } else {
+    const opt = findOption(partId, optionId);
+    const defaultSeller = opt ? cheapestSeller(opt).name : null;
+    state.selections[partId] = { optionId, seller: defaultSeller };
+  }
+  state.added = false;
+  render();
+}
+
+function selectSeller(partId, optionId, sellerName, evt) {
+  if (evt) evt.stopPropagation();
+  const current = state.selections[partId];
+  if (!current || current.optionId !== optionId) return;
+  state.selections[partId] = { optionId, seller: sellerName };
+  state.added = false;
+  render();
+}
+
+function getChosenOptionAndSeller(p) {
+  const sel = state.selections[p.id];
+  if (!sel) return null;
+  const opt = p.options.find((o) => o.id === sel.optionId);
+  if (!opt) return null;
+  const seller = opt.sellers.find((s) => s.name === sel.seller) || cheapestSeller(opt);
+  return { opt, seller };
+}
+
+function toggleOpen(partId) {
+  state.openPart = state.openPart === partId ? null : partId;
+  render();
+}
+
+function toggleMinor(name) {
+  state.minorSelected[name] = !state.minorSelected[name];
+  state.added = false;
+  render();
+}
+
+const CART_KEY = "ro_configurator_cart";
+const ORDER_ADDRESS_KEY = "ro_configurator_delivery_address";
+
+// Cart shape: { items: [ {source, ...itemFields} ], minorCount, minorTotal }
+// "items" accumulates from any entry point (full builder, ready-made models,
+// or the parts-only catalog) rather than being overwritten each time.
+
+function loadCart() {
+  try {
+    const raw = localStorage.getItem(CART_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    if (!parsed) return { items: [], minorCount: 0, minorTotal: 0 };
+    if (!Array.isArray(parsed.items)) parsed.items = [];
+    return parsed;
+  } catch (e) {
+    return { items: [], minorCount: 0, minorTotal: 0 };
+  }
+}
+
+function writeCart(cart) {
+  try {
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function cartTotal(cart) {
+  const itemsTotal = cart.items.reduce((s, i) => s + i.price, 0);
+  return itemsTotal + (cart.minorTotal || 0);
+}
+
+function addLineItemToCart(item) {
+  const cart = loadCart();
+  cart.items.push(item);
+  writeCart(cart);
+}
+
+function buildCartSnapshot() {
+  const chosenParts = MAJOR_PARTS.filter((p) => state.selections[p.id]);
+  const items = chosenParts.map((p) => {
+    const info = getChosenOptionAndSeller(p);
+    return {
+      source: "builder",
+      partId: p.id,
+      name: p.name,
+      optionLabel: info.opt.label,
+      seller: info.seller.name,
+      price: info.seller.price,
+    };
+  });
+  const minorCount = Object.values(state.minorSelected).filter(Boolean).length;
+  const minorTotal = minorCount * MINOR_PRICE;
+  return { items, minorCount, minorTotal };
+}
+
+function addToCart() {
+  // A full completed build replaces any previous "builder"-sourced items,
+  // but leaves ready-made / parts-only items already in the cart untouched.
+  const existing = loadCart();
+  const nonBuilderItems = existing.items.filter((i) => i.source !== "builder");
+  const snapshot = buildCartSnapshot();
+  const cart = {
+    items: [...nonBuilderItems, ...snapshot.items],
+    minorCount: snapshot.minorCount,
+    minorTotal: snapshot.minorTotal,
+  };
+  writeCart(cart);
+  state.added = true;
+  render();
+}
+
+function goToCart() {
+  state.view = "cart";
+  state.checkoutStep = "cart";
+  switchView();
+  renderNav();
+  renderCheckout();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function removeCartItem(index) {
+  const cart = loadCart();
+  cart.items.splice(index, 1);
+  writeCart(cart);
+  renderCheckout();
+}
+
+function partMediaHtml(p, sizePx) {
+  sizePx = sizePx || 96;
+  if (p.imageUrl) {
+    return `<img src="${esc(p.imageUrl)}" alt="${esc(p.name)}" style="max-width:100%;max-height:${sizePx}px;object-fit:contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" /><span style="display:none;">${ICONS[p.icon] || ICONS.cartridge}</span>`;
+  }
+  return ICONS[p.icon] || ICONS.cartridge;
+}
+
+function showInfoModal(partId, evt) {
+  if (evt) evt.stopPropagation();
+  const p = MAJOR_PARTS.find((x) => x.id === partId);
+  if (!p) return;
+  const mediaHtml = partMediaHtml(p);
+  const specsHtml = (p.specs || []).map((s) => `<li>${esc(s)}</li>`).join("");
+  document.getElementById("modalCard").innerHTML = `
+    <div class="modal-image-wrap">${mediaHtml}</div>
+    <div class="modal-body">
+      <div class="modal-header-row">
+        <div>
+          <span class="modal-group-tag">${esc(p.group)}</span>
+          <h3 class="modal-title">${esc(p.name)}</h3>
+        </div>
+        <button class="modal-close" onclick="closeInfoModal()" aria-label="Close">✕</button>
+      </div>
+      <p class="modal-desc">${esc(p.info || p.desc)}</p>
+      ${specsHtml ? `<p class="modal-section-label">Good to know</p><ul class="modal-specs">${specsHtml}</ul>` : ""}
+    </div>
+  `;
+  document.getElementById("modalOverlay").classList.add("visible");
+}
+
+function showOptionInfo(partId, optionId, evt) {
+  if (evt) evt.stopPropagation();
+  const p = MAJOR_PARTS.find((x) => x.id === partId);
+  if (!p) return;
+  const o = p.options.find((x) => x.id === optionId);
+  if (!o) return;
+  const iconSvg = ICONS[p.icon] || ICONS.cartridge;
+  document.getElementById("modalCard").innerHTML = `
+    <div class="modal-image-wrap">${iconSvg}</div>
+    <div class="modal-body">
+      <div class="modal-header-row">
+        <div>
+          <span class="modal-group-tag">${esc(p.name)}</span>
+          <h3 class="modal-title">${esc(o.label)}</h3>
+        </div>
+        <button class="modal-close" onclick="closeInfoModal()" aria-label="Close">✕</button>
+      </div>
+      <p class="modal-desc">${esc(o.note || "No additional details for this option.")}</p>
+      <p class="modal-section-label">Available from</p>
+      <ul class="modal-specs">${o.sellers.map((s) => `<li>${esc(s.name)} — ${currency(s.price)}</li>`).join("")}</ul>
+    </div>
+  `;
+  document.getElementById("modalOverlay").classList.add("visible");
+}
+
+function showMinorInfo(groupName, itemName, evt) {
+  if (evt) evt.stopPropagation();
+  const mg = MINOR_GROUPS.find((g) => g.group === groupName);
+  if (!mg) return;
+  const item = mg.items.find((i) => i.name === itemName);
+  if (!item) return;
+  document.getElementById("modalCard").innerHTML = `
+    <div class="modal-image-wrap">${ICONS.cartridge}</div>
+    <div class="modal-body">
+      <div class="modal-header-row">
+        <div>
+          <span class="modal-group-tag">${esc(groupName)}</span>
+          <h3 class="modal-title">${esc(item.name)}</h3>
+        </div>
+        <button class="modal-close" onclick="closeInfoModal()" aria-label="Close">✕</button>
+      </div>
+      <p class="modal-desc">${esc(item.note || "No additional details available for this part.")}</p>
+    </div>
+  `;
+  document.getElementById("modalOverlay").classList.add("visible");
+}
+
+function closeInfoModal() {
+  document.getElementById("modalOverlay").classList.remove("visible");
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeInfoModal();
+});
+
+// ---------------------------------------------------------------------------
+// CANCELLATION (shared by RO orders and servicing bookings)
+// ---------------------------------------------------------------------------
+const CANCELLATION_REASONS = [
+  "Ordered by mistake",
+  "Found a better price elsewhere",
+  "Delivery/service is taking too long",
+  "Changed my mind",
+  "Need to change the address or details",
+  "Other",
+];
+
+const cancelModalState = { kind: null, id: null, selectedReason: null };
+
+function openCancelModal(kind, id) {
+  cancelModalState.kind = kind; // "order" | "booking"
+  cancelModalState.id = id;
+  cancelModalState.selectedReason = null;
+
+  const reasonsHtml = CANCELLATION_REASONS.map((r, idx) => `
+    <button class="cancel-reason-btn" id="cancelReasonBtn${idx}" onclick="selectCancelReason(${idx})">
+      <span class="cancel-reason-radio"></span>
+      <span>${esc(r)}</span>
+    </button>
+  `).join("");
+
+  document.getElementById("modalCard").innerHTML = `
+    <div class="modal-body" style="padding-top:24px;">
+      <div class="modal-header-row">
+        <div>
+          <span class="modal-group-tag">${kind === "order" ? "Cancel Order" : "Cancel Servicing"}</span>
+          <h3 class="modal-title">Why are you cancelling?</h3>
+        </div>
+        <button class="modal-close" onclick="closeInfoModal()" aria-label="Close">✕</button>
+      </div>
+      <p class="modal-desc">Please select a reason. This helps us understand what went wrong.</p>
+      <div class="cancel-reason-list">${reasonsHtml}</div>
+      <div id="cancelOtherWrap" style="display:none;">
+        <label class="mock-signin-label" style="margin-top:10px;">Please specify</label>
+        <input type="text" id="cancelOtherText" class="mock-signin-input" placeholder="Tell us more" />
+      </div>
+      <p id="cancelReasonError" class="address-form-error" style="display:none; margin-top:12px;">Please select a reason to continue.</p>
+      <button class="mock-signin-submit" style="background:#C4501F;" onclick="confirmCancellation()">Confirm Cancellation</button>
+    </div>
+  `;
+  document.getElementById("modalOverlay").classList.add("visible");
+}
+
+function selectCancelReason(idx) {
+  cancelModalState.selectedReason = CANCELLATION_REASONS[idx];
+  CANCELLATION_REASONS.forEach((r, i) => {
+    const btn = document.getElementById("cancelReasonBtn" + i);
+    if (btn) btn.classList.toggle("active", i === idx);
+  });
+  const otherWrap = document.getElementById("cancelOtherWrap");
+  if (otherWrap) otherWrap.style.display = CANCELLATION_REASONS[idx] === "Other" ? "block" : "none";
+  const errEl = document.getElementById("cancelReasonError");
+  if (errEl) errEl.style.display = "none";
+}
+
+function confirmCancellation() {
+  if (!cancelModalState.selectedReason) {
+    const errEl = document.getElementById("cancelReasonError");
+    if (errEl) errEl.style.display = "block";
+    return;
+  }
+  let reasonText = cancelModalState.selectedReason;
+  if (reasonText === "Other") {
+    const otherEl = document.getElementById("cancelOtherText");
+    const otherVal = otherEl ? otherEl.value.trim() : "";
+    reasonText = otherVal ? "Other: " + otherVal : "Other";
+  }
+
+  if (cancelModalState.kind === "order") {
+    applyOrderCancellation(cancelModalState.id, reasonText);
+  } else if (cancelModalState.kind === "booking") {
+    applyBookingCancellation(cancelModalState.id, reasonText);
+  }
+  closeInfoModal();
+}
+
+function applyOrderCancellation(orderId, reason) {
+  const orders = loadOrderHistory();
+  const order = orders.find((o) => o.id === orderId);
+  if (!order) return;
+  order.status = "Cancelled";
+  order.cancellationReason = reason;
+  order.cancelledAt = new Date().toISOString();
+  try {
+    localStorage.setItem(orderHistoryKey(), JSON.stringify(orders));
+  } catch (e) { /* ignore */ }
+  renderOrderHistory();
+}
+
+function applyBookingCancellation(bookingId, reason) {
+  const bookings = loadServiceBookings();
+  const booking = bookings.find((b) => b.id === bookingId);
+  if (!booking) return;
+  booking.status = "Cancelled";
+  booking.cancellationReason = reason;
+  booking.cancelledAt = new Date().toISOString();
+  try {
+    localStorage.setItem(serviceBookingsKey(), JSON.stringify(bookings));
+  } catch (e) { /* ignore */ }
+  renderBookServicing();
+}
+
+function esc(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// ---------------------------------------------------------------------------
+// RENDER
+// ---------------------------------------------------------------------------
+function render() {
+  renderRail();
+  renderSummary();
+}
+
+function renderRail() {
+  const { g, order } = groupParts();
+  let html = "";
+
+  order.forEach((groupName) => {
+    html += `<div class="rail-group"><div class="rail-group-label">${esc(groupName)}</div>`;
+    g[groupName].forEach((p) => {
+      const chosenInfo = getChosenOptionAndSeller(p);
+      const chosenOptionId = state.selections[p.id] ? state.selections[p.id].optionId : null;
+      const isOpen = state.openPart === p.id;
+      const isMissing = REQUIRED_CORE.includes(p.id) && !chosenInfo;
+      const suggestions = getSuggestions();
+      const isSuggested = suggestions.includes(p.id) && !chosenInfo;
+
+      let statusHtml;
+      if (chosenInfo) {
+        statusHtml = `<span class="chosen-text">${esc(chosenInfo.opt.label)} · ${esc(chosenInfo.seller.name)} · ${currency(chosenInfo.seller.price)}</span>`;
+      } else if (isMissing) {
+        statusHtml = `<span class="missing-text">Required — not selected</span>`;
+      } else if (isSuggested) {
+        statusHtml = `<span class="suggested-text">Suggested to complete your build</span>`;
+      } else {
+        statusHtml = `<span class="empty-text">Not selected</span>`;
+      }
+
+      html += `
+        <div class="part-card">
+          <button class="part-row ${isOpen ? 'open' : ''}" onclick="toggleOpen('${p.id}')">
+            <span class="part-seq">${String(p.seq).padStart(2, "0")}</span>
+            <span class="part-info">
+              <span class="part-name-row">
+                <span class="part-name">${esc(p.name)}</span>
+                <button class="info-btn" onclick="showInfoModal('${p.id}', event)" aria-label="More info about ${esc(p.name)}">i</button>
+                ${p.optional ? '<span class="optional-tag">optional</span>' : ''}
+              </span>
+              <span class="part-status">${statusHtml}</span>
+            </span>
+            <span class="chevron">${isOpen ? '–' : '+'}</span>
+          </button>
+          <div class="option-panel ${isOpen ? 'visible' : ''}">
+            <p class="part-desc">${esc(p.desc)}</p>
+            <div class="option-list">
+              ${p.options.map((o) => {
+                const isOptionChosen = chosenOptionId === o.id;
+                const cheapest = cheapestSeller(o);
+                return `
+                <div class="option-block">
+                  <div class="option-row">
+                    <button class="option-btn ${isOptionChosen ? 'active' : ''}" onclick="selectOption('${p.id}','${o.id}')">
+                      <span>${esc(o.label)}</span>
+                      <span class="option-price">from ${currency(cheapest.price)}</span>
+                    </button>
+                    ${o.note ? `<button class="option-info-btn" onclick="showOptionInfo('${p.id}','${o.id}', event)" aria-label="More info about ${esc(o.label)}">i</button>` : ""}
+                  </div>
+                  ${isOptionChosen ? `
+                    <div class="seller-panel">
+                      <p class="seller-panel-label">Choose seller</p>
+                      <div class="seller-list">
+                        ${o.sellers.map((s) => `
+                          <button class="seller-btn ${chosenInfo && chosenInfo.seller.name === s.name ? 'active' : ''}" onclick="selectSeller('${p.id}','${o.id}','${s.name.replace(/'/g, "\\'")}', event)">
+                            <span class="seller-name">${esc(s.name)}</span>
+                            <span class="seller-price">${currency(s.price)}</span>
+                          </button>
+                        `).join("")}
+                      </div>
+                    </div>
+                  ` : ""}
+                </div>
+              `;}).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    html += `</div>`;
+  });
+
+  html += `<div class="rail-group"><div class="rail-group-label">Minor & Supporting Parts</div>`;
+  MINOR_GROUPS.forEach((mg) => {
+    html += `
+      <div class="minor-group-card">
+        <div class="minor-group-title">${esc(mg.group)}</div>
+        <div class="minor-grid">
+          ${mg.items.map((item) => `
+            <div class="minor-item">
+              <label class="minor-item-label">
+                <input type="checkbox" ${state.minorSelected[item.name] ? 'checked' : ''} onchange="toggleMinor('${item.name.replace(/'/g, "\\'")}')" />
+                <span>${esc(item.name)}</span>
+              </label>
+              <button class="option-info-btn minor-info-btn" onclick="showMinorInfo('${mg.group.replace(/'/g, "\\'")}','${item.name.replace(/'/g, "\\'")}', event)" aria-label="More info about ${esc(item.name)}">i</button>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  });
+  html += `</div>`;
+
+  document.getElementById("rail").innerHTML = html;
+}
+
+function getSuggestions() {
+  const suggestions = [];
+  MAJOR_PARTS.forEach((p) => {
+    if (state.selections[p.id] && p.requiresSuggested) {
+      p.requiresSuggested.forEach((reqId) => {
+        if (!state.selections[reqId] && !suggestions.includes(reqId)) suggestions.push(reqId);
+      });
+    }
+  });
+  return suggestions;
+}
+
+function renderSummary() {
+  const chosenParts = MAJOR_PARTS.filter((p) => state.selections[p.id]);
+  const majorTotal = chosenParts.reduce((sum, p) => {
+    const info = getChosenOptionAndSeller(p);
+    return sum + (info ? info.seller.price : 0);
+  }, 0);
+  const minorCount = Object.values(state.minorSelected).filter(Boolean).length;
+  const minorTotal = minorCount * MINOR_PRICE;
+  const total = majorTotal + minorTotal;
+  const missingRequired = REQUIRED_CORE.filter((id) => !state.selections[id]);
+  const suggestions = getSuggestions();
+  const isReady = missingRequired.length === 0;
+  const pct = (chosenParts.length / MAJOR_PARTS.length) * 100;
+
+  let listHtml;
+  if (chosenParts.length === 0) {
+    listHtml = `<p class="empty-state">Nothing selected yet. Choose parts on the left — your build list fills in as you go.</p>`;
+  } else {
+    listHtml = `<ul class="summary-list">`;
+    chosenParts.forEach((p) => {
+      const info = getChosenOptionAndSeller(p);
+      listHtml += `<li class="summary-item"><span class="summary-item-name">${esc(p.name)} <span class="summary-item-seller">(${esc(info.seller.name)})</span></span><span class="summary-item-price">${currency(info.seller.price)}</span></li>`;
+    });
+    if (minorCount > 0) {
+      listHtml += `<li class="summary-item"><span class="summary-item-name">Minor parts (${minorCount})</span><span class="summary-item-price">${currency(minorTotal)}</span></li>`;
+    }
+    listHtml += `</ul>`;
+  }
+
+  let warningHtml = "";
+  if (missingRequired.length > 0 || suggestions.length > 0) {
+    warningHtml = `<div class="warning-box">`;
+    if (missingRequired.length > 0) {
+      warningHtml += `
+        <div class="warning-line">
+          <span class="warning-icon">!</span>
+          <span><strong>Missing required:</strong> ${missingRequired.map(partName).map(esc).join(", ")}</span>
+        </div>`;
+    }
+    if (suggestions.length > 0) {
+      warningHtml += `
+        <div class="warning-line">
+          <span class="warning-icon-soft">+</span>
+          <span><strong>Suggested:</strong> ${suggestions.map(partName).map(esc).join(", ")} — pairs with parts you've already picked.</span>
+        </div>`;
+    }
+    warningHtml += `</div>`;
+  }
+
+  const readyNote = isReady ? `<p class="ready-note">Your purifier has every required part. Optional stages (UV, alkaline, copper, TDS control) can still be added above.</p>` : "";
+
+  const destToggleHtml = `
+    <div class="save-destination-toggle">
+      <button class="save-dest-btn ${state.saveDestination === 'browser' ? 'active' : ''}" onclick="setSaveDestination('browser')">This browser</button>
+      <button class="save-dest-btn ${state.saveDestination === 'google' ? 'active' : ''}" onclick="setSaveDestination('google')">${state.googleUser ? esc(state.googleUser.email) : 'Google account'}</button>
+    </div>
+  `;
+
+  let actionHtml;
+  if (isReady && state.added) {
+    actionHtml = `
+      <div class="added-confirm">Added to cart ✓</div>
+      <button class="cart-btn go-to-cart" onclick="goToCart()">Go to cart</button>
+    `;
+  } else if (isReady) {
+    actionHtml = `<button class="cart-btn ready" onclick="addToCart()">Add to cart</button>`;
+  } else {
+    actionHtml = `${destToggleHtml}
+       <button class="cart-btn save-later" onclick="saveBuildForLater()">${state.savedJustNow ? "Saved ✓ — find it in My Builds" : "Save & build later"}</button>
+       <p class="save-later-note">Not ready yet? Save your progress to this browser, or to a Google account so it can follow you across devices once that's connected.</p>`;
+  }
+
+  document.getElementById("summary").innerHTML = `
+    <div class="summary-header">
+      <span class="summary-title">Your build</span>
+      <span class="summary-count">${chosenParts.length}/${MAJOR_PARTS.length} major parts</span>
+    </div>
+    <div class="progress-track"><div class="progress-fill" style="width:${pct}%"></div></div>
+    ${listHtml}
+    ${warningHtml}
+    <div class="total-row">
+      <span class="total-label">Total</span>
+      <span class="total-value">${currency(total)}</span>
+    </div>
+    ${actionHtml}
+    ${readyNote}
+  `;
+}
+
+const myBuildsState = { tab: "browser" };
+
+function setMyBuildsTab(tab) {
+  myBuildsState.tab = tab;
+  renderMyBuilds();
+}
+
+function renderMyBuilds() {
+  if (myBuildsState.tab === "google" && !state.googleUser) {
+    myBuildsState.tab = "browser";
+  }
+  const builds = loadSavedBuilds(myBuildsState.tab);
+  const container = document.getElementById("myBuildsView");
+
+  const tabsHtml = `
+    <div class="my-builds-tabs">
+      <button class="my-builds-tab ${myBuildsState.tab === 'browser' ? 'active' : ''}" onclick="setMyBuildsTab('browser')">This browser</button>
+      <button class="my-builds-tab ${myBuildsState.tab === 'google' ? 'active' : ''}" onclick="${state.googleUser ? "setMyBuildsTab('google')" : "openMockGoogleSignIn()"}">
+        ${state.googleUser ? esc(state.googleUser.email) : 'Sign in to see Google builds'}
+      </button>
+    </div>
+  `;
+
+  if (builds.length === 0) {
+    container.innerHTML = `
+      <div class="my-builds-header">
+        <h2 class="my-builds-title">My Builds</h2>
+        <p class="my-builds-sub">Purifier builds you've saved to finish later will show up here.</p>
+      </div>
+      ${tabsHtml}
+      <div class="my-builds-empty">
+        ${myBuildsState.tab === "google"
+          ? "No builds saved to this Google account yet."
+          : "You haven't saved any builds to this browser yet."}
+        <br/>
+        Start choosing parts, and if your build isn't complete, you can save it for later.
+        <br/>
+        <button class="back-to-builder-btn" onclick="navLinkClick('Build Your Purifier')">Go to builder</button>
+      </div>
+    `;
+    return;
+  }
+
+  const cardsHtml = builds.map((b) => {
+    const partsPreview = b.partNames.length > 0
+      ? b.partNames.slice(0, 5).join(", ") + (b.partNames.length > 5 ? `, +${b.partNames.length - 5} more` : "")
+      : "No parts selected yet";
+    const sourceTag = b.savedTo === "google"
+      ? `<span class="saved-build-source-tag google">Google</span>`
+      : `<span class="saved-build-source-tag browser">Browser</span>`;
+    return `
+      <div class="saved-build-card">
+        <div class="saved-build-top">
+          <div>
+            <p class="saved-build-date">Saved ${esc(formatSavedDate(b.savedAt))} ${sourceTag}</p>
+            <p class="saved-build-progress">${b.partsCount}/${b.totalPartsCount} major parts selected</p>
+          </div>
+          <span class="saved-build-total">${currency(b.total)}</span>
+        </div>
+        <p class="saved-build-parts">${esc(partsPreview)}</p>
+        <div class="saved-build-actions">
+          <button class="resume-btn" onclick="resumeBuild('${b.id}','${myBuildsState.tab}')">Resume this build</button>
+          <button class="delete-build-btn" onclick="deleteSavedBuild('${b.id}','${myBuildsState.tab}', event)">Delete</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <div class="my-builds-header">
+      <h2 class="my-builds-title">My Builds</h2>
+      <p class="my-builds-sub">${builds.length} saved build${builds.length === 1 ? "" : "s"} in ${myBuildsState.tab === "google" ? "your Google account" : "this browser"}. Resume any of them to pick up exactly where you left off.</p>
+    </div>
+    ${tabsHtml}
+    ${cardsHtml}
+  `;
+}
+
+// ---------------------------------------------------------------------------
+// CHECKOUT: Cart -> Delivery Address -> Payment -> Confirmation
+// ---------------------------------------------------------------------------
+
+function loadDeliveryAddress() {
+  try {
+    const raw = localStorage.getItem(ORDER_ADDRESS_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+function saveDeliveryAddress(addr) {
+  try {
+    localStorage.setItem(ORDER_ADDRESS_KEY, JSON.stringify(addr));
+  } catch (e) { /* ignore */ }
+}
+
+function goToStep(step) {
+  state.checkoutStep = step;
+  renderCheckout();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function proceedToAddress() {
+  goToStep("address");
+}
+
+function proceedToPayment() {
+  const form = document.getElementById("addressForm");
+  if (!form) return;
+  const fields = ["fullName", "phone", "line1", "city", "stateName", "pincode"];
+  const values = {};
+  let hasError = false;
+  fields.forEach((f) => {
+    const el = document.getElementById("addr_" + f);
+    const val = el ? el.value.trim() : "";
+    values[f] = val;
+    if (!val) {
+      hasError = true;
+      if (el) el.style.borderColor = "#C4501F";
+    } else if (el) {
+      el.style.borderColor = "#D8DCE1";
+    }
+  });
+  const line2El = document.getElementById("addr_line2");
+  values.line2 = line2El ? line2El.value.trim() : "";
+
+  if (hasError) {
+    const errEl = document.getElementById("addressFormError");
+    if (errEl) errEl.style.display = "block";
+    return;
+  }
+
+  state.deliveryAddress = values;
+  saveDeliveryAddress(values);
+  goToStep("payment");
+}
+
+function backToCart() {
+  goToStep("cart");
+}
+
+function backToAddress() {
+  goToStep("address");
+}
+
+function setPaymentMethod(method) {
+  state.paymentMethod = method;
+  renderCheckout();
+}
+
+const ORDER_HISTORY_KEY_BROWSER = "ro_configurator_order_history_browser";
+
+function orderHistoryKey() {
+  if (state.googleUser) return "ro_configurator_order_history_google_" + state.googleUser.email.toLowerCase();
+  return ORDER_HISTORY_KEY_BROWSER;
+}
+
+function loadOrderHistory() {
+  try {
+    const raw = localStorage.getItem(orderHistoryKey());
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveOrderToHistory(order) {
+  try {
+    const history = loadOrderHistory();
+    history.unshift(order);
+    localStorage.setItem(orderHistoryKey(), JSON.stringify(history));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function placeOrder() {
+  const cart = loadCart();
+  const order = {
+    id: "ORD" + Date.now().toString().slice(-8),
+    placedAt: new Date().toISOString(),
+    items: cart.items,
+    minorCount: cart.minorCount || 0,
+    minorTotal: cart.minorTotal || 0,
+    total: cartTotal(cart),
+    address: state.deliveryAddress,
+    paymentMethod: state.paymentMethod,
+    status: "Placed",
+    savedTo: state.googleUser ? "google" : "browser",
+  };
+  state.lastOrder = order;
+  saveOrderToHistory(order);
+  try { localStorage.removeItem(CART_KEY); } catch (e) { /* ignore */ }
+  goToStep("confirmation");
+}
+
+function startNewBuildAfterOrder() {
+  state.selections = {};
+  state.minorSelected = {};
+  state.added = false;
+  state.activeBuildId = null;
+  state.activeBuildDestination = null;
+  state.checkoutStep = "cart";
+  state.view = "builder";
+  switchView();
+  render();
+  renderNav();
+}
+
+function renderCheckout() {
+  const container = document.getElementById("cartView");
+  const step = state.checkoutStep;
+
+  const stepsBarHtml = `
+    <div class="checkout-steps">
+      <span class="checkout-step ${step === 'cart' ? 'active' : (step !== 'cart' ? 'done' : '')}">1. Cart</span>
+      <span class="checkout-step-sep">›</span>
+      <span class="checkout-step ${step === 'address' ? 'active' : (step === 'payment' || step === 'confirmation' ? 'done' : '')}">2. Address</span>
+      <span class="checkout-step-sep">›</span>
+      <span class="checkout-step ${step === 'payment' ? 'active' : (step === 'confirmation' ? 'done' : '')}">3. Payment</span>
+    </div>
+  `;
+
+  if (step === "cart") {
+    const cart = loadCart();
+    if (!cart.items.length) {
+      container.innerHTML = `
+        <div class="my-builds-header">
+          <h2 class="my-builds-title">Your Cart</h2>
+          <p class="my-builds-sub">Nothing in your cart yet.</p>
+        </div>
+        <div class="my-builds-empty">
+          Complete a purifier build, or add a ready-made purifier or individual parts, to see them here.
+          <br/>
+          <button class="back-to-builder-btn" onclick="navLinkClick('Build Your Purifier')">Go to builder</button>
+        </div>
+      `;
+      return;
+    }
+    const sourceLabel = { builder: "Custom build", readyMade: "Ready-made", partsOnly: "Part" };
+    const itemsHtml = cart.items.map((i, idx) => `
+      <div class="cart-item-row">
+        <div class="cart-item-info">
+          <div class="cart-item-name">${esc(i.name)} <span class="saved-build-source-tag browser">${esc(sourceLabel[i.source] || "Item")}</span></div>
+          <div class="cart-item-sub">${esc(i.optionLabel || "")}${i.seller ? " · " + esc(i.seller) : ""}</div>
+        </div>
+        <div class="cart-item-price-col">
+          <div class="cart-item-price">${currency(i.price)}</div>
+          <button class="cart-item-remove" onclick="removeCartItem(${idx})">Remove</button>
+        </div>
+      </div>
+    `).join("");
+    const minorRow = cart.minorCount > 0 ? `
+      <div class="cart-item-row">
+        <div class="cart-item-info">
+          <div class="cart-item-name">Minor parts (${cart.minorCount})</div>
+        </div>
+        <div class="cart-item-price">${currency(cart.minorTotal)}</div>
+      </div>
+    ` : "";
+
+    container.innerHTML = `
+      <div class="my-builds-header">
+        <h2 class="my-builds-title">Your Cart</h2>
+        <p class="my-builds-sub">Review everything before checking out.</p>
+      </div>
+      ${stepsBarHtml}
+      <div class="checkout-card">
+        ${itemsHtml}
+        ${minorRow}
+        <div class="cart-total-row">
+          <span>Total</span>
+          <span class="cart-total-value">${currency(cartTotal(cart))}</span>
+        </div>
+      </div>
+      <button class="cart-btn ready" onclick="proceedToAddress()">Proceed to Buy</button>
+      <button class="back-link-btn" onclick="navLinkClick('Build Your Purifier')">← Keep editing build</button>
+    `;
+    return;
+  }
+
+  if (step === "address") {
+    const saved = state.deliveryAddress || loadDeliveryAddress() || {};
+    container.innerHTML = `
+      <div class="my-builds-header">
+        <h2 class="my-builds-title">Delivery Address</h2>
+        <p class="my-builds-sub">Tell us where to deliver your purifier.</p>
+      </div>
+      ${stepsBarHtml}
+      <div class="checkout-card">
+        <p id="addressFormError" class="address-form-error" style="display:none;">Please fill in all required fields.</p>
+        <div class="address-form" id="addressForm">
+          <label class="mock-signin-label">Full name*</label>
+          <input type="text" id="addr_fullName" class="mock-signin-input" value="${esc(saved.fullName || '')}" placeholder="e.g. Priya Sharma" />
+
+          <label class="mock-signin-label">Phone number*</label>
+          <input type="tel" id="addr_phone" class="mock-signin-input" value="${esc(saved.phone || '')}" placeholder="e.g. 98765 43210" />
+
+          <label class="mock-signin-label">Address line 1*</label>
+          <input type="text" id="addr_line1" class="mock-signin-input" value="${esc(saved.line1 || '')}" placeholder="House no., street, area" />
+
+          <label class="mock-signin-label">Address line 2 (optional)</label>
+          <input type="text" id="addr_line2" class="mock-signin-input" value="${esc(saved.line2 || '')}" placeholder="Landmark, apartment, etc." />
+
+          <div class="address-form-row">
+            <div>
+              <label class="mock-signin-label">City*</label>
+              <input type="text" id="addr_city" class="mock-signin-input" value="${esc(saved.city || '')}" placeholder="City" />
+            </div>
+            <div>
+              <label class="mock-signin-label">State*</label>
+              <input type="text" id="addr_stateName" class="mock-signin-input" value="${esc(saved.stateName || '')}" placeholder="State" />
+            </div>
+          </div>
+
+          <label class="mock-signin-label">Pincode*</label>
+          <input type="text" id="addr_pincode" class="mock-signin-input" value="${esc(saved.pincode || '')}" placeholder="6-digit pincode" />
+        </div>
+      </div>
+      <button class="cart-btn ready" onclick="proceedToPayment()">Proceed to Payment</button>
+      <button class="back-link-btn" onclick="backToCart()">← Back to cart</button>
+    `;
+    return;
+  }
+
+  if (step === "payment") {
+    const cart = loadCart();
+    const total = cartTotal(cart);
+    const methods = [
+      { id: "card", label: "Credit / Debit Card", note: "Visa, Mastercard, RuPay and more." },
+      { id: "upi", label: "UPI", note: "Pay via any UPI app using a QR code or ID." },
+      { id: "cod", label: "Cash on Delivery", note: "Pay in cash when your purifier arrives." },
+    ];
+    const methodsHtml = methods.map((m) => `
+      <button class="payment-method-btn ${state.paymentMethod === m.id ? 'active' : ''}" onclick="setPaymentMethod('${m.id}')">
+        <span class="payment-method-radio ${state.paymentMethod === m.id ? 'checked' : ''}"></span>
+        <span class="payment-method-text">
+          <span class="payment-method-label">${esc(m.label)}</span>
+          <span class="payment-method-note">${esc(m.note)}</span>
+        </span>
+      </button>
+    `).join("");
+
+    container.innerHTML = `
+      <div class="my-builds-header">
+        <h2 class="my-builds-title">Payment</h2>
+        <p class="my-builds-sub">This is a demo checkout — no real payment will be processed.</p>
+      </div>
+      ${stepsBarHtml}
+      <div class="checkout-card">
+        <p class="modal-section-label">Choose payment method</p>
+        <div class="payment-method-list">${methodsHtml}</div>
+        <div class="cart-total-row" style="margin-top:16px;">
+          <span>Amount payable</span>
+          <span class="cart-total-value">${currency(total)}</span>
+        </div>
+      </div>
+      <button class="cart-btn ready" onclick="placeOrder()">Place Order</button>
+      <button class="back-link-btn" onclick="backToAddress()">← Back to address</button>
+    `;
+    return;
+  }
+
+  if (step === "confirmation") {
+    const order = state.lastOrder;
+    if (!order) {
+      container.innerHTML = `<div class="my-builds-empty">No recent order found. <button class="back-to-builder-btn" onclick="navLinkClick('Build Your Purifier')">Go to builder</button></div>`;
+      return;
+    }
+    container.innerHTML = `
+      <div class="order-confirm-wrap">
+        <div class="order-confirm-tick">✓</div>
+        <h2 class="my-builds-title" style="text-align:center;">Order placed!</h2>
+        <p class="my-builds-sub" style="text-align:center;">Order ID: ${esc(order.id)}</p>
+        <div class="checkout-card">
+          <p class="modal-section-label">Delivering to</p>
+          <p class="order-confirm-address">
+            ${esc(order.address.fullName)}, ${esc(order.address.phone)}<br/>
+            ${esc(order.address.line1)}${order.address.line2 ? ", " + esc(order.address.line2) : ""}<br/>
+            ${esc(order.address.city)}, ${esc(order.address.stateName)} – ${esc(order.address.pincode)}
+          </p>
+          <p class="modal-section-label" style="margin-top:14px;">Payment method</p>
+          <p class="order-confirm-address">${order.paymentMethod === 'cod' ? 'Cash on Delivery' : order.paymentMethod === 'upi' ? 'UPI' : 'Credit / Debit Card'}</p>
+          <div class="cart-total-row" style="margin-top:14px;">
+            <span>Total paid</span>
+            <span class="cart-total-value">${currency(order.total)}</span>
+          </div>
+        </div>
+        <button class="cart-btn ready" onclick="startNewBuildAfterOrder()">Start a new build</button>
+        <button class="back-link-btn" onclick="navLinkClick('Order History')">View order history →</button>
+      </div>
+    `;
+    return;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// ORDER HISTORY
+// ---------------------------------------------------------------------------
+function formatOrderDate(iso) {
+  const d = new Date(iso);
+  return d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) +
+    " · " + d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+}
+
+function renderOrderHistory() {
+  const orders = loadOrderHistory();
+  const container = document.getElementById("orderHistoryView");
+  const scopeLabel = state.googleUser ? esc(state.googleUser.email) : "this browser";
+
+  if (orders.length === 0) {
+    container.innerHTML = `
+      <div class="my-builds-header">
+        <h2 class="my-builds-title">Order History</h2>
+        <p class="my-builds-sub">Orders placed from ${scopeLabel} will show up here.</p>
+      </div>
+      <div class="my-builds-empty">
+        You haven't placed any orders yet.
+        <br/>
+        <button class="back-to-builder-btn" onclick="navLinkClick('Build Your Purifier')">Go to builder</button>
+      </div>
+    `;
+    return;
+  }
+
+  const cardsHtml = orders.map((o) => {
+    const itemsPreview = (o.items || []).map((i) => i.name);
+    const preview = itemsPreview.length > 0
+      ? itemsPreview.slice(0, 4).join(", ") + (itemsPreview.length > 4 ? `, +${itemsPreview.length - 4} more` : "")
+      : "No item details";
+    const payLabel = o.paymentMethod === "cod" ? "Cash on Delivery" : o.paymentMethod === "upi" ? "UPI" : "Credit / Debit Card";
+    const isCancelled = o.status === "Cancelled";
+    const statusTag = isCancelled
+      ? `<span class="saved-build-source-tag cancelled">Cancelled</span>`
+      : "";
+    return `
+      <div class="saved-build-card">
+        <div class="saved-build-top">
+          <div>
+            <p class="saved-build-date">Order ${esc(o.id)} · ${esc(formatOrderDate(o.placedAt))}</p>
+            <p class="saved-build-progress">${esc(o.status || "Placed")} · ${esc(payLabel)} ${statusTag}</p>
+          </div>
+          <span class="saved-build-total">${currency(o.total)}</span>
+        </div>
+        <p class="saved-build-parts">${esc(preview)}</p>
+        ${o.address ? `<p class="saved-build-parts">Delivering to ${esc(o.address.city)}, ${esc(o.address.stateName)} – ${esc(o.address.pincode)}</p>` : ""}
+        ${isCancelled
+          ? `<p class="cancellation-note">Cancelled: ${esc(o.cancellationReason || "No reason given")}</p>`
+          : `<button class="cancel-order-btn" onclick="openCancelModal('order','${o.id}')">Cancel Order</button>`}
+      </div>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <div class="my-builds-header">
+      <h2 class="my-builds-title">Order History</h2>
+      <p class="my-builds-sub">${orders.length} order${orders.length === 1 ? "" : "s"} placed from ${scopeLabel}.</p>
+    </div>
+    ${cardsHtml}
+  `;
+}
+
+// ---------------------------------------------------------------------------
+// BUY READY MADE
+// ---------------------------------------------------------------------------
+const readyMadeAddedFlags = {};
+
+function addReadyMadeToCart(modelId) {
+  const model = READY_MADE_MODELS.find((m) => m.id === modelId);
+  if (!model) return;
+  addLineItemToCart({
+    source: "readyMade",
+    name: model.name,
+    optionLabel: "Ready-made purifier",
+    seller: "AquaClear",
+    price: model.price,
+  });
+  readyMadeAddedFlags[modelId] = true;
+  renderReadyMade();
+  setTimeout(() => { readyMadeAddedFlags[modelId] = false; renderReadyMade(); }, 2000);
+}
+
+function renderReadyMade() {
+  const container = document.getElementById("readyMadeView");
+  const cardsHtml = READY_MADE_MODELS.map((m) => {
+    const media = partMediaHtml(m, 40);
+    const added = readyMadeAddedFlags[m.id];
+    return `
+      <div class="model-card">
+        <div class="model-card-icon">${media}</div>
+        <h3 class="model-card-name">${esc(m.name)}</h3>
+        <p class="model-card-tagline">${esc(m.tagline)}</p>
+        <ul class="model-card-specs">${m.specs.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
+        <div class="model-card-footer">
+          <span class="model-card-price">${currency(m.price)}</span>
+          <button class="model-add-btn ${added ? 'added' : ''}" onclick="addReadyMadeToCart('${m.id}')">${added ? 'Added ✓' : 'Add to cart'}</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <div class="my-builds-header">
+      <h2 class="my-builds-title">Buy Ready Made</h2>
+      <p class="my-builds-sub">Pre-built purifiers, ready to order — no assembly required.</p>
+    </div>
+    <div class="catalog-grid">${cardsHtml}</div>
+  `;
+}
+
+// ---------------------------------------------------------------------------
+// BUY PARTS ONLY
+// ---------------------------------------------------------------------------
+const partsOnlyAddedFlags = {}; // key: partId + optionId + sellerName
+
+function addPartOnlyToCart(partId, optionId, sellerName) {
+  const p = MAJOR_PARTS.find((x) => x.id === partId);
+  if (!p) return;
+  const opt = p.options.find((o) => o.id === optionId);
+  if (!opt) return;
+  const seller = opt.sellers.find((s) => s.name === sellerName);
+  if (!seller) return;
+  addLineItemToCart({
+    source: "partsOnly",
+    partId: p.id,
+    name: p.name,
+    optionLabel: opt.label,
+    seller: seller.name,
+    price: seller.price,
+  });
+  const key = partId + "|" + optionId + "|" + sellerName;
+  partsOnlyAddedFlags[key] = true;
+  renderPartsOnly();
+  setTimeout(() => { partsOnlyAddedFlags[key] = false; renderPartsOnly(); }, 2000);
+}
+
+function renderPartsOnly() {
+  const container = document.getElementById("partsOnlyView");
+  const { g, order } = groupParts();
+
+  const groupsHtml = order.map((groupName) => {
+    const partsHtml = g[groupName].map((p) => {
+      const optionsHtml = p.options.map((o) => {
+        const sellerRows = o.sellers.map((s) => {
+          const key = p.id + "|" + o.id + "|" + s.name;
+          const added = partsOnlyAddedFlags[key];
+          return `
+            <div class="part-catalog-option-row">
+              <div class="part-catalog-option-info">
+                <span class="part-catalog-option-label">${esc(o.label)}</span>
+                <span class="part-catalog-option-seller">${esc(s.name)}</span>
+              </div>
+              <div class="part-catalog-option-right">
+                <span class="part-catalog-price">${currency(s.price)}</span>
+                <button class="part-catalog-add-btn ${added ? 'added' : ''}" onclick="addPartOnlyToCart('${p.id}','${o.id}','${s.name.replace(/'/g, "\\'")}')">${added ? 'Added ✓' : 'Add'}</button>
+              </div>
+            </div>
+          `;
+        }).join("");
+        const optionInfoBtn = o.note
+          ? `<button class="option-info-btn" onclick="showOptionInfo('${p.id}','${o.id}', event)" aria-label="More info about ${esc(o.label)}">i</button>`
+          : "";
+        return `
+          <div class="part-catalog-option-block">
+            <div class="part-catalog-option-group">
+              ${sellerRows}
+            </div>
+            ${optionInfoBtn}
+          </div>
+        `;
+      }).join("");
+      return `
+        <div class="part-catalog-card">
+          <div class="part-catalog-name-row">
+            <h4 class="part-catalog-name">${esc(p.name)}</h4>
+            <button class="info-btn" onclick="showInfoModal('${p.id}', event)" aria-label="More info about ${esc(p.name)}">i</button>
+          </div>
+          <div class="part-catalog-options">${optionsHtml}</div>
+        </div>
+      `;
+    }).join("");
+    return `
+      <div class="parts-catalog-group">
+        <div class="parts-catalog-group-title">${esc(groupName)}</div>
+        ${partsHtml}
+      </div>
+    `;
+  }).join("");
+
+  const cart = loadCart();
+  const miniCartHtml = cart.items.length > 0 ? `
+    <div class="sticky-mini-cart">
+      <span class="sticky-mini-cart-text">${cart.items.length} item${cart.items.length === 1 ? "" : "s"} in cart · ${currency(cartTotal(cart))}</span>
+      <button class="sticky-mini-cart-btn" onclick="goToCart()">Go to cart</button>
+    </div>
+  ` : "";
+
+  container.innerHTML = `
+    <div class="my-builds-header">
+      <h2 class="my-builds-title">Buy Parts Only</h2>
+      <p class="my-builds-sub">Browse and buy individual parts directly, without going through the full builder.</p>
+    </div>
+    ${groupsHtml}
+    ${miniCartHtml}
+  `;
+}
+
+// ---------------------------------------------------------------------------
+// BOOK SERVICING
+// ---------------------------------------------------------------------------
+const SERVICE_BOOKINGS_KEY_BROWSER = "ro_configurator_service_bookings_browser";
+
+function serviceBookingsKey() {
+  if (state.googleUser) return "ro_configurator_service_bookings_google_" + state.googleUser.email.toLowerCase();
+  return SERVICE_BOOKINGS_KEY_BROWSER;
+}
+
+function loadServiceBookings() {
+  try {
+    const raw = localStorage.getItem(serviceBookingsKey());
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveServiceBooking(booking) {
+  try {
+    const bookings = loadServiceBookings();
+    bookings.unshift(booking);
+    localStorage.setItem(serviceBookingsKey(), JSON.stringify(bookings));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+
+const bookServicingState = { step: "form", selectedType: "general" };
+
+// Subscription checkout is fully separate from the main product cart/checkout —
+// selecting a servicing package never touches CART_KEY, and buying purifier
+// parts never touches this. The two are kept isolated on purpose.
+const subscriptionCheckoutState = {
+  step: "address", // "address" | "payment" | "confirmation"
+  package: null,
+  address: null,
+  paymentMethod: "upi",
+  autoRenewEnabled: false,
+  autoRenewUpiId: "",
+  lastSubscriptionOrder: null,
+};
+
+function setServiceType(typeId) {
+  bookServicingState.selectedType = typeId;
+  renderBookServicing();
+}
+
+function submitServiceBooking() {
+  const fields = ["fullName", "phone", "address", "city", "stateName", "pincode", "preferredDate"];
+  const values = { serviceType: bookServicingState.selectedType };
+  let hasError = false;
+  fields.forEach((f) => {
+    const el = document.getElementById("svc_" + f);
+    const val = el ? el.value.trim() : "";
+    values[f] = val;
+    if (!val) {
+      hasError = true;
+      if (el) el.style.borderColor = "#C4501F";
+    } else if (el) {
+      el.style.borderColor = "#D8DCE1";
+    }
+  });
+  const notesEl = document.getElementById("svc_notes");
+  values.notes = notesEl ? notesEl.value.trim() : "";
+
+  if (hasError) {
+    const errEl = document.getElementById("serviceFormError");
+    if (errEl) errEl.style.display = "block";
+    return;
+  }
+
+  const booking = {
+    id: "SVC" + Date.now().toString().slice(-8),
+    bookedAt: new Date().toISOString(),
+    status: "Requested",
+    ...values,
+  };
+  saveServiceBooking(booking);
+  bookServicingState.step = "confirmation";
+  bookServicingState.lastBooking = booking;
+  renderBookServicing();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function startAnotherServiceBooking() {
+  bookServicingState.step = "form";
+  bookServicingState.selectedType = "general";
+  renderBookServicing();
+}
+
+const packageSubscribedFlags = {};
+
+function subscribeToPackage(pkgId) {
+  const pkg = SERVICE_PACKAGES.find((p) => p.id === pkgId);
+  if (!pkg) return;
+  subscriptionCheckoutState.package = pkg;
+  subscriptionCheckoutState.step = "address";
+  subscriptionCheckoutState.address = state.deliveryAddress || loadDeliveryAddress() || null;
+  state.view = "subscriptionCheckout";
+  switchView();
+  renderNav();
+  renderSubscriptionCheckout();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function renderBookServicing() {
+  const container = document.getElementById("bookServicingView");
+
+  if (bookServicingState.step === "confirmation") {
+    const b = bookServicingState.lastBooking;
+    const typeInfo = SERVICE_TYPES.find((t) => t.id === b.serviceType);
+    container.innerHTML = `
+      <div class="order-confirm-wrap">
+        <div class="order-confirm-tick">✓</div>
+        <h2 class="my-builds-title" style="text-align:center;">Servicing requested!</h2>
+        <p class="my-builds-sub" style="text-align:center;">Booking ID: ${esc(b.id)}</p>
+        <div class="checkout-card">
+          <p class="modal-section-label">Service type</p>
+          <p class="order-confirm-address">${esc(typeInfo ? typeInfo.label : b.serviceType)}</p>
+          <p class="modal-section-label" style="margin-top:14px;">Preferred date</p>
+          <p class="order-confirm-address">${esc(b.preferredDate)}</p>
+          <p class="modal-section-label" style="margin-top:14px;">Address</p>
+          <p class="order-confirm-address">
+            ${esc(b.fullName)}, ${esc(b.phone)}<br/>
+            ${esc(b.address)}<br/>
+            ${esc(b.city)}, ${esc(b.stateName)} – ${esc(b.pincode)}
+          </p>
+          ${b.notes ? `<p class="modal-section-label" style="margin-top:14px;">Notes</p><p class="order-confirm-address">${esc(b.notes)}</p>` : ""}
+        </div>
+        <p class="my-builds-sub" style="text-align:center;">Our team will contact you to confirm a time slot.</p>
+        <button class="cart-btn ready" onclick="startAnotherServiceBooking()">Book another service</button>
+        <button class="back-link-btn" onclick="navLinkClick('Build Your Purifier')">← Back to builder</button>
+      </div>
+    `;
+    return;
+  }
+
+  const scopeLabel = state.googleUser ? esc(state.googleUser.email) : "this browser";
+  const saved = loadServiceBookings();
+
+  const typeCardsHtml = SERVICE_TYPES.map((t) => `
+    <button class="payment-method-btn ${bookServicingState.selectedType === t.id ? 'active' : ''}" onclick="setServiceType('${t.id}')">
+      <span class="payment-method-radio ${bookServicingState.selectedType === t.id ? 'checked' : ''}"></span>
+      <span class="payment-method-text">
+        <span class="payment-method-label">${esc(t.label)}</span>
+        <span class="payment-method-note">${esc(t.note)}</span>
+      </span>
+    </button>
+  `).join("");
+
+  const historyHtml = saved.length > 0 ? `
+    <div class="my-builds-header" style="margin-top:28px;">
+      <h2 class="my-builds-title" style="font-size:16px;">Previous requests from ${scopeLabel}</h2>
+    </div>
+    ${saved.slice(0, 5).map((b) => {
+      const typeInfo = SERVICE_TYPES.find((t) => t.id === b.serviceType);
+      const isCancelled = b.status === "Cancelled";
+      const statusTagClass = isCancelled ? "cancelled" : "google";
+      return `
+        <div class="saved-build-card">
+          <div class="saved-build-top">
+            <div>
+              <p class="saved-build-date">${esc(b.id)} · ${esc(formatOrderDate(b.bookedAt))}</p>
+              <p class="saved-build-progress">${esc(typeInfo ? typeInfo.label : b.serviceType)}</p>
+            </div>
+            <span class="saved-build-source-tag ${statusTagClass}">${esc(b.status)}</span>
+          </div>
+          <p class="saved-build-parts">Preferred date: ${esc(b.preferredDate)}</p>
+          ${isCancelled
+            ? `<p class="cancellation-note">Cancelled: ${esc(b.cancellationReason || "No reason given")}</p>`
+            : `<button class="cancel-order-btn" onclick="openCancelModal('booking','${b.id}')">Cancel Booking</button>`}
+        </div>
+      `;
+    }).join("")}
+  ` : "";
+
+  const packagesHtml = SERVICE_PACKAGES.map((pkg) => {
+    const subscribed = packageSubscribedFlags[pkg.id];
+    return `
+      <div class="package-card ${pkg.highlight ? 'highlight' : ''}">
+        ${pkg.highlight ? '<span class="package-badge">Most popular</span>' : ''}
+        <h3 class="package-name">${esc(pkg.name)}</h3>
+        <p class="package-tagline">${esc(pkg.tagline)}</p>
+        <div class="package-price-row">
+          <span class="package-price">${currency(pkg.price)}</span>
+          <span class="package-period">${esc(pkg.period)}</span>
+        </div>
+        <ul class="model-card-specs package-services">${pkg.services.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
+        <button class="model-add-btn package-subscribe-btn ${subscribed ? 'added' : ''}" onclick="subscribeToPackage('${pkg.id}')">${subscribed ? 'Added ✓' : 'Subscribe'}</button>
+      </div>
+    `;
+  }).join("");
+
+  container.innerHTML = `
+    <div class="my-builds-header">
+      <h2 class="my-builds-title">Book Servicing</h2>
+      <p class="my-builds-sub">Schedule a one-time visit, or subscribe to a yearly care plan for ongoing maintenance.</p>
+    </div>
+
+    <div class="my-builds-header" style="margin-top:6px;">
+      <h2 class="my-builds-title" style="font-size:16px;">Yearly Servicing Packages</h2>
+      <p class="my-builds-sub">Subscribe once, get regular visits and discounts all year.</p>
+    </div>
+    <div class="catalog-grid package-grid">${packagesHtml}</div>
+
+    <div class="my-builds-header" style="margin-top:28px;">
+      <h2 class="my-builds-title" style="font-size:16px;">Or Book a One-Time Visit</h2>
+    </div>
+    <div class="checkout-card">
+      <p class="modal-section-label">What do you need?</p>
+      <div class="payment-method-list">${typeCardsHtml}</div>
+    </div>
+    <div class="checkout-card">
+      <p id="serviceFormError" class="address-form-error" style="display:none;">Please fill in all required fields.</p>
+      <div class="address-form">
+        <label class="mock-signin-label">Full name*</label>
+        <input type="text" id="svc_fullName" class="mock-signin-input" placeholder="e.g. Priya Sharma" />
+
+        <label class="mock-signin-label">Phone number*</label>
+        <input type="tel" id="svc_phone" class="mock-signin-input" placeholder="e.g. 98765 43210" />
+
+        <label class="mock-signin-label">Address*</label>
+        <input type="text" id="svc_address" class="mock-signin-input" placeholder="House no., street, area" />
+
+        <div class="address-form-row">
+          <div>
+            <label class="mock-signin-label">City*</label>
+            <input type="text" id="svc_city" class="mock-signin-input" placeholder="City" />
+          </div>
+          <div>
+            <label class="mock-signin-label">State*</label>
+            <input type="text" id="svc_stateName" class="mock-signin-input" placeholder="State" />
+          </div>
+        </div>
+
+        <label class="mock-signin-label">Pincode*</label>
+        <input type="text" id="svc_pincode" class="mock-signin-input" placeholder="6-digit pincode" />
+
+        <label class="mock-signin-label">Preferred date*</label>
+        <input type="date" id="svc_preferredDate" class="mock-signin-input" />
+
+        <label class="mock-signin-label">Notes (optional)</label>
+        <input type="text" id="svc_notes" class="mock-signin-input" placeholder="e.g. Purifier makes a humming noise" />
+      </div>
+    </div>
+    <button class="cart-btn ready" onclick="submitServiceBooking()">Request Servicing</button>
+    ${historyHtml}
+  `;
+}
+
+// ---------------------------------------------------------------------------
+// SUBSCRIPTION CHECKOUT (fully isolated from the main product cart/checkout)
+// ---------------------------------------------------------------------------
+const SUBSCRIPTION_HISTORY_KEY_BROWSER = "ro_configurator_subscription_history_browser";
+
+function subscriptionHistoryKey() {
+  if (state.googleUser) return "ro_configurator_subscription_history_google_" + state.googleUser.email.toLowerCase();
+  return SUBSCRIPTION_HISTORY_KEY_BROWSER;
+}
+
+function loadSubscriptionHistory() {
+  try {
+    const raw = localStorage.getItem(subscriptionHistoryKey());
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveSubscriptionToHistory(sub) {
+  try {
+    const history = loadSubscriptionHistory();
+    history.unshift(sub);
+    localStorage.setItem(subscriptionHistoryKey(), JSON.stringify(history));
+  } catch (e) { /* ignore */ }
+}
+
+function subCheckoutGoToStep(step) {
+  subscriptionCheckoutState.step = step;
+  renderSubscriptionCheckout();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function subCheckoutProceedToPayment() {
+  const fields = ["fullName", "phone", "line1", "city", "stateName", "pincode"];
+  const values = {};
+  let hasError = false;
+  fields.forEach((f) => {
+    const el = document.getElementById("subAddr_" + f);
+    const val = el ? el.value.trim() : "";
+    values[f] = val;
+    if (!val) {
+      hasError = true;
+      if (el) el.style.borderColor = "#C4501F";
+    } else if (el) {
+      el.style.borderColor = "#D8DCE1";
+    }
+  });
+  const line2El = document.getElementById("subAddr_line2");
+  values.line2 = line2El ? line2El.value.trim() : "";
+
+  if (hasError) {
+    const errEl = document.getElementById("subAddressFormError");
+    if (errEl) errEl.style.display = "block";
+    return;
+  }
+
+  subscriptionCheckoutState.address = values;
+  subCheckoutGoToStep("payment");
+}
+
+function subCheckoutBackToAddress() {
+  subCheckoutGoToStep("address");
+}
+
+function subCheckoutSetPaymentMethod(method) {
+  subscriptionCheckoutState.paymentMethod = method;
+  renderSubscriptionCheckout();
+}
+
+function subCheckoutToggleAutoRenew() {
+  subscriptionCheckoutState.autoRenewEnabled = !subscriptionCheckoutState.autoRenewEnabled;
+  renderSubscriptionCheckout();
+}
+
+function subCheckoutConfirmSubscription() {
+  if (subscriptionCheckoutState.autoRenewEnabled) {
+    const upiEl = document.getElementById("subAutoRenewUpiId");
+    const upiVal = upiEl ? upiEl.value.trim() : subscriptionCheckoutState.autoRenewUpiId;
+    if (!upiVal) {
+      if (upiEl) upiEl.style.borderColor = "#C4501F";
+      return;
+    }
+    subscriptionCheckoutState.autoRenewUpiId = upiVal;
+  }
+
+  const pkg = subscriptionCheckoutState.package;
+  const sub = {
+    id: "SUB" + Date.now().toString().slice(-8),
+    subscribedAt: new Date().toISOString(),
+    packageId: pkg.id,
+    packageName: pkg.name,
+    price: pkg.price,
+    period: pkg.period,
+    services: pkg.services,
+    address: subscriptionCheckoutState.address,
+    paymentMethod: subscriptionCheckoutState.paymentMethod,
+    autoRenew: subscriptionCheckoutState.autoRenewEnabled
+      ? { enabled: true, upiId: subscriptionCheckoutState.autoRenewUpiId }
+      : { enabled: false, upiId: null },
+    status: "Active",
+  };
+  saveSubscriptionToHistory(sub);
+  subscriptionCheckoutState.lastSubscriptionOrder = sub;
+  subscriptionCheckoutState.step = "confirmation";
+  renderSubscriptionCheckout();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function subCheckoutStartOver() {
+  subscriptionCheckoutState.step = "address";
+  subscriptionCheckoutState.package = null;
+  subscriptionCheckoutState.autoRenewEnabled = false;
+  subscriptionCheckoutState.autoRenewUpiId = "";
+  navLinkClick("Book Servicing");
+}
+
+function renderSubscriptionCheckout() {
+  const container = document.getElementById("subscriptionCheckoutView");
+  const pkg = subscriptionCheckoutState.package;
+  const step = subscriptionCheckoutState.step;
+
+  if (!pkg && step !== "confirmation") {
+    container.innerHTML = `<div class="my-builds-empty">No package selected. <button class="back-to-builder-btn" onclick="navLinkClick('Book Servicing')">Back to Book Servicing</button></div>`;
+    return;
+  }
+
+  const stepsBarHtml = `
+    <div class="checkout-steps">
+      <span class="checkout-step ${step === 'address' ? 'active' : (step !== 'address' ? 'done' : '')}">1. Address</span>
+      <span class="checkout-step-sep">›</span>
+      <span class="checkout-step ${step === 'payment' ? 'active' : (step === 'confirmation' ? 'done' : '')}">2. Payment</span>
+    </div>
+  `;
+
+  const packageSummaryHtml = pkg ? `
+    <div class="checkout-card sub-package-summary">
+      <p class="modal-section-label">Subscribing to</p>
+      <p class="sub-package-name">${esc(pkg.name)} — Yearly Servicing Plan</p>
+      <ul class="model-card-specs">${pkg.services.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
+      <div class="cart-total-row">
+        <span>Plan price</span>
+        <span class="cart-total-value">${currency(pkg.price)} ${esc(pkg.period)}</span>
+      </div>
+    </div>
+  ` : "";
+
+  if (step === "address") {
+    const saved = subscriptionCheckoutState.address || {};
+    container.innerHTML = `
+      <div class="my-builds-header">
+        <h2 class="my-builds-title">Subscribe to Servicing Plan</h2>
+        <p class="my-builds-sub">This is a separate checkout just for your servicing subscription — it won't include any purifier or parts in your product cart.</p>
+      </div>
+      ${stepsBarHtml}
+      ${packageSummaryHtml}
+      <div class="checkout-card">
+        <p class="modal-section-label">Service address</p>
+        <p id="subAddressFormError" class="address-form-error" style="display:none;">Please fill in all required fields.</p>
+        <div class="address-form" id="subAddressForm">
+          <label class="mock-signin-label">Full name*</label>
+          <input type="text" id="subAddr_fullName" class="mock-signin-input" value="${esc(saved.fullName || '')}" placeholder="e.g. Priya Sharma" />
+
+          <label class="mock-signin-label">Phone number*</label>
+          <input type="tel" id="subAddr_phone" class="mock-signin-input" value="${esc(saved.phone || '')}" placeholder="e.g. 98765 43210" />
+
+          <label class="mock-signin-label">Address line 1*</label>
+          <input type="text" id="subAddr_line1" class="mock-signin-input" value="${esc(saved.line1 || '')}" placeholder="House no., street, area" />
+
+          <label class="mock-signin-label">Address line 2 (optional)</label>
+          <input type="text" id="subAddr_line2" class="mock-signin-input" value="${esc(saved.line2 || '')}" placeholder="Landmark, apartment, etc." />
+
+          <div class="address-form-row">
+            <div>
+              <label class="mock-signin-label">City*</label>
+              <input type="text" id="subAddr_city" class="mock-signin-input" value="${esc(saved.city || '')}" placeholder="City" />
+            </div>
+            <div>
+              <label class="mock-signin-label">State*</label>
+              <input type="text" id="subAddr_stateName" class="mock-signin-input" value="${esc(saved.stateName || '')}" placeholder="State" />
+            </div>
+          </div>
+
+          <label class="mock-signin-label">Pincode*</label>
+          <input type="text" id="subAddr_pincode" class="mock-signin-input" value="${esc(saved.pincode || '')}" placeholder="6-digit pincode" />
+        </div>
+      </div>
+      <button class="cart-btn ready" onclick="subCheckoutProceedToPayment()">Proceed to Payment</button>
+      <button class="back-link-btn" onclick="navLinkClick('Book Servicing')">← Back to Book Servicing</button>
+    `;
+    return;
+  }
+
+  if (step === "payment") {
+    const methods = [
+      { id: "upi", label: "UPI", note: "Pay via any UPI app using a QR code or ID." },
+      { id: "card", label: "Credit / Debit Card", note: "Visa, Mastercard, RuPay and more." },
+      { id: "cod", label: "Pay to Technician", note: "Pay in cash or card when the technician visits." },
+    ];
+    const methodsHtml = methods.map((m) => `
+      <button class="payment-method-btn ${subscriptionCheckoutState.paymentMethod === m.id ? 'active' : ''}" onclick="subCheckoutSetPaymentMethod('${m.id}')">
+        <span class="payment-method-radio ${subscriptionCheckoutState.paymentMethod === m.id ? 'checked' : ''}"></span>
+        <span class="payment-method-text">
+          <span class="payment-method-label">${esc(m.label)}</span>
+          <span class="payment-method-note">${esc(m.note)}</span>
+        </span>
+      </button>
+    `).join("");
+
+    container.innerHTML = `
+      <div class="my-builds-header">
+        <h2 class="my-builds-title">Subscription Payment</h2>
+        <p class="my-builds-sub">This is a demo checkout — no real payment will be processed.</p>
+      </div>
+      ${stepsBarHtml}
+      ${packageSummaryHtml}
+      <div class="checkout-card">
+        <p class="modal-section-label">Choose payment method</p>
+        <div class="payment-method-list">${methodsHtml}</div>
+        <div class="cart-total-row" style="margin-top:16px;">
+          <span>Amount payable</span>
+          <span class="cart-total-value">${currency(pkg.price)}</span>
+        </div>
+      </div>
+      <div class="checkout-card">
+        <div class="auto-renew-toggle-row">
+          <div>
+            <p class="auto-renew-title">Enable auto-renewal via UPI</p>
+            <p class="auto-renew-note">Your plan renews automatically each year using this UPI ID — cancel anytime from Order History.</p>
+          </div>
+          <button class="toggle-switch ${subscriptionCheckoutState.autoRenewEnabled ? 'on' : ''}" onclick="subCheckoutToggleAutoRenew()" aria-label="Toggle auto-renewal"><span class="toggle-knob"></span></button>
+        </div>
+        ${subscriptionCheckoutState.autoRenewEnabled ? `
+          <label class="mock-signin-label" style="margin-top:12px;">UPI ID for auto-renewal*</label>
+          <input type="text" id="subAutoRenewUpiId" class="mock-signin-input" value="${esc(subscriptionCheckoutState.autoRenewUpiId || '')}" placeholder="e.g. yourname@upi" oninput="subscriptionCheckoutState.autoRenewUpiId = this.value" />
+          <p class="auto-renew-demo-note">This is a demo — no real UPI mandate is created. It only stores the ID you enter for this subscription.</p>
+        ` : ""}
+      </div>
+      <button class="cart-btn ready" onclick="subCheckoutConfirmSubscription()">Confirm Subscription</button>
+      <button class="back-link-btn" onclick="subCheckoutBackToAddress()">← Back to address</button>
+    `;
+    return;
+  }
+
+  if (step === "confirmation") {
+    const sub = subscriptionCheckoutState.lastSubscriptionOrder;
+    if (!sub) {
+      container.innerHTML = `<div class="my-builds-empty">No recent subscription found. <button class="back-to-builder-btn" onclick="navLinkClick('Book Servicing')">Back to Book Servicing</button></div>`;
+      return;
+    }
+    container.innerHTML = `
+      <div class="order-confirm-wrap">
+        <div class="order-confirm-tick">✓</div>
+        <h2 class="my-builds-title" style="text-align:center;">Subscribed!</h2>
+        <p class="my-builds-sub" style="text-align:center;">Subscription ID: ${esc(sub.id)}</p>
+        <div class="checkout-card">
+          <p class="modal-section-label">Plan</p>
+          <p class="order-confirm-address">${esc(sub.packageName)} — ${currency(sub.price)} ${esc(sub.period)}</p>
+          <p class="modal-section-label" style="margin-top:14px;">Service address</p>
+          <p class="order-confirm-address">
+            ${esc(sub.address.fullName)}, ${esc(sub.address.phone)}<br/>
+            ${esc(sub.address.line1)}${sub.address.line2 ? ", " + esc(sub.address.line2) : ""}<br/>
+            ${esc(sub.address.city)}, ${esc(sub.address.stateName)} – ${esc(sub.address.pincode)}
+          </p>
+          <p class="modal-section-label" style="margin-top:14px;">Payment method</p>
+          <p class="order-confirm-address">${sub.paymentMethod === 'cod' ? 'Pay to Technician' : sub.paymentMethod === 'upi' ? 'UPI' : 'Credit / Debit Card'}</p>
+          ${sub.autoRenew.enabled ? `
+            <p class="modal-section-label" style="margin-top:14px;">Auto-renewal</p>
+            <p class="order-confirm-address">Enabled via UPI (${esc(sub.autoRenew.upiId)}) — this plan will renew automatically each year.</p>
+          ` : ""}
+        </div>
+        <p class="my-builds-sub" style="text-align:center;">This subscription is separate from any purifier or parts order.</p>
+        <button class="cart-btn ready" onclick="subCheckoutStartOver()">Back to Book Servicing</button>
+      </div>
+    `;
+    return;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// HOME
+// ---------------------------------------------------------------------------
+function renderHome() {
+  const container = document.getElementById("homeView");
+
+  const categoryCards = [
+    { label: "Build Your Own", icon: "wrench", note: "Choose every part, piece by piece", action: "Build Your Purifier" },
+    { label: "Ready Made", icon: "box", note: "Pre-built purifiers, ready to order", action: "Buy Ready Made" },
+    { label: "Buy Parts Only", icon: "wrench2", note: "Browse filters, membranes & more", action: "Buy Parts Only" },
+    { label: "Book Servicing", icon: "calendar", note: "Maintenance, repair & care plans", action: "Book Servicing" },
+  ].map((c) => `
+    <button class="home-cat-card" onclick="navLinkClick('${c.action}')">
+      <span class="home-cat-icon">${NAV_ICONS[c.icon] || NAV_ICONS.info}</span>
+      <span class="home-cat-label">${esc(c.label)}</span>
+      <span class="home-cat-note">${esc(c.note)}</span>
+    </button>
+  `).join("");
+
+  const featuredModels = READY_MADE_MODELS.slice(0, 3).map((m) => {
+    const media = partMediaHtml(m, 40);
+    return `
+      <div class="home-model-card">
+        <div class="model-card-icon">${media}</div>
+        <h3 class="model-card-name">${esc(m.name)}</h3>
+        <p class="model-card-tagline">${esc(m.tagline)}</p>
+        <div class="model-card-footer">
+          <span class="model-card-price">${currency(m.price)}</span>
+          <button class="model-add-btn" onclick="navLinkClick('Buy Ready Made')">View</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const trustPoints = [
+    { icon: "info", title: "Genuine Parts", note: "Every filter and membrane checked against real filtration standards." },
+    { icon: "calendar", title: "Easy Servicing", note: "One-time visits or yearly care plans, booked in a few taps." },
+    { icon: "list", title: "Build Your Way", note: "Full custom builds, ready-made models, or parts — your choice." },
+    { icon: "chat", title: "Real Support", note: "Reach us by phone, email or WhatsApp whenever you need help." },
+  ].map((t) => `
+    <div class="home-trust-card">
+      <span class="home-trust-icon">${NAV_ICONS[t.icon] || NAV_ICONS.info}</span>
+      <p class="home-trust-title">${esc(t.title)}</p>
+      <p class="home-trust-note">${esc(t.note)}</p>
+    </div>
+  `).join("");
+
+  container.innerHTML = `
+    <div class="home-hero">
+      <span class="home-hero-eyebrow">AquaClear Water Solutions</span>
+      <h1 class="home-hero-title">Clean water, built your way.</h1>
+      <p class="home-hero-sub">Assemble a custom RO purifier part by part, choose a ready-made model, buy individual parts, or keep your existing purifier running with a service plan — all in one place.</p>
+      <div class="home-hero-actions">
+        <button class="cart-btn ready home-hero-btn" onclick="navLinkClick('Build Your Purifier')">Start Building</button>
+        <button class="back-link-btn home-hero-link" onclick="navLinkClick('Buy Ready Made')">Browse ready-made purifiers →</button>
+      </div>
+    </div>
+
+    <div class="home-section">
+      <p class="modal-section-label">What are you looking for?</p>
+      <div class="home-cat-grid">${categoryCards}</div>
+    </div>
+
+    <div class="home-section">
+      <div class="home-section-header-row">
+        <p class="modal-section-label" style="margin:0;">Popular Ready-Made Models</p>
+        <button class="back-link-btn home-see-all" onclick="navLinkClick('Buy Ready Made')">See all →</button>
+      </div>
+      <div class="catalog-grid">${featuredModels}</div>
+    </div>
+
+    <div class="home-section">
+      <p class="modal-section-label">Why AquaClear</p>
+      <div class="home-trust-grid">${trustPoints}</div>
+    </div>
+
+    <div class="home-cta-banner">
+      <div>
+        <p class="home-cta-title">Not sure where to start?</p>
+        <p class="home-cta-note">Build your own purifier and we'll flag anything missing as you go.</p>
+      </div>
+      <button class="cart-btn ready home-cta-btn" onclick="navLinkClick('Build Your Purifier')">Start Building</button>
+    </div>
+  `;
+}
+
+// ---------------------------------------------------------------------------
+// ABOUT
+// ---------------------------------------------------------------------------
+function renderAbout() {
+  const container = document.getElementById("aboutView");
+  container.innerHTML = `
+    <div class="my-builds-header">
+      <h2 class="my-builds-title">About AquaClear</h2>
+      <p class="my-builds-sub">Clean water, built your way.</p>
+    </div>
+
+    <div class="checkout-card">
+      <p class="modal-section-label">Our Story</p>
+      <p class="about-paragraph">AquaClear started in 2014 with a simple idea: water purifiers shouldn't be a one-size-fits-all black box. Whether you want a ready-made purifier, a fully custom build part by part, or just a replacement filter, we wanted to give people the pieces and the knowledge to make water safe at home, on their own terms.</p>
+      <p class="about-paragraph">Today AquaClear serves homes and offices across India, with a growing catalog of RO, UV and UF components, dummy ready-made models, and a servicing network to keep every purifier running well long after installation.</p>
+    </div>
+
+    <div class="checkout-card">
+      <p class="modal-section-label">What We Offer</p>
+      <ul class="model-card-specs about-list">
+        <li>Build-your-own purifier — choose every part and seller, piece by piece</li>
+        <li>Ready-made purifiers — pre-configured models for common household needs</li>
+        <li>Individual parts — buy filters, membranes and components on their own</li>
+        <li>Servicing & yearly care plans — routine maintenance, repairs and installations</li>
+      </ul>
+    </div>
+
+    <div class="checkout-card">
+      <p class="modal-section-label">Our Values</p>
+      <div class="about-values-grid">
+        <div class="about-value-card">
+          <p class="about-value-title">Transparency</p>
+          <p class="about-value-note">Clear pricing, clear specs, no hidden parts or fine print.</p>
+        </div>
+        <div class="about-value-card">
+          <p class="about-value-title">Quality</p>
+          <p class="about-value-note">Every part is checked against real filtration standards.</p>
+        </div>
+        <div class="about-value-card">
+          <p class="about-value-title">Support</p>
+          <p class="about-value-note">From first build to yearly servicing, we stay reachable.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="checkout-card">
+      <p class="modal-section-label">Company Details</p>
+      <p class="about-paragraph">
+        AquaClear Water Solutions Pvt. Ltd.<br/>
+        CIN: U29999MH2014PTC123456 (dummy)<br/>
+        Registered Office: 4th Floor, Tech Park One, Yerwada, Pune, Maharashtra 411006, India<br/>
+        GSTIN: 27ABCDE1234F1Z5 (dummy)
+      </p>
+    </div>
+
+    <p class="my-builds-sub" style="text-align:center;">All information on this page is placeholder content for demonstration purposes.</p>
+  `;
+}
+
+// ---------------------------------------------------------------------------
+// CONTACT / SUPPORT
+// ---------------------------------------------------------------------------
+const CONTACT_FAQS = [
+  { q: "How long does delivery take?", a: "Ready-made purifiers and parts typically arrive within 3–5 business days. Custom builds may take a little longer depending on part availability." },
+  { q: "Can I cancel an order after placing it?", a: "Yes — go to Order History or Book Servicing, select the order or booking, and choose \"Cancel\". You'll be asked to pick a reason." },
+  { q: "Do you offer installation?", a: "Yes, installation can be requested from the Book Servicing page under \"New Installation\"." },
+  { q: "What if a part is incompatible with my existing purifier?", a: "Each part page has an \"i\" info button explaining what it does and how it fits — check this before ordering, or contact support for guidance." },
+];
+
+let contactFaqOpenIndex = null;
+
+function toggleContactFaq(idx) {
+  contactFaqOpenIndex = contactFaqOpenIndex === idx ? null : idx;
+  renderContact();
+}
+
+function submitContactForm() {
+  const fields = ["name", "email", "message"];
+  let hasError = false;
+  fields.forEach((f) => {
+    const el = document.getElementById("contact_" + f);
+    const val = el ? el.value.trim() : "";
+    if (!val) {
+      hasError = true;
+      if (el) el.style.borderColor = "#C4501F";
+    } else if (el) {
+      el.style.borderColor = "#D8DCE1";
+    }
+  });
+  const errEl = document.getElementById("contactFormError");
+  const successEl = document.getElementById("contactFormSuccess");
+  if (hasError) {
+    if (errEl) errEl.style.display = "block";
+    if (successEl) successEl.style.display = "none";
+    return;
+  }
+  if (errEl) errEl.style.display = "none";
+  if (successEl) successEl.style.display = "block";
+  ["name", "email", "message"].forEach((f) => {
+    const el = document.getElementById("contact_" + f);
+    if (el) el.value = "";
+  });
+}
+
+function renderContact() {
+  const container = document.getElementById("contactView");
+
+  const faqHtml = CONTACT_FAQS.map((item, idx) => `
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleContactFaq(${idx})">
+        <span>${esc(item.q)}</span>
+        <span class="faq-chevron">${contactFaqOpenIndex === idx ? "–" : "+"}</span>
+      </button>
+      ${contactFaqOpenIndex === idx ? `<p class="faq-answer">${esc(item.a)}</p>` : ""}
+    </div>
+  `).join("");
+
+  container.innerHTML = `
+    <div class="my-builds-header">
+      <h2 class="my-builds-title">Contact / Support</h2>
+      <p class="my-builds-sub">We're happy to help with orders, servicing, or general questions.</p>
+    </div>
+
+    <div class="checkout-card contact-info-grid">
+      <div class="contact-info-item">
+        <p class="modal-section-label">Customer Support</p>
+        <p class="about-paragraph">📞 1800-123-4567 (toll-free)<br/>Mon–Sat, 9 AM – 7 PM IST</p>
+      </div>
+      <div class="contact-info-item">
+        <p class="modal-section-label">Email</p>
+        <p class="about-paragraph">✉️ support@aquaclear.example<br/>Replies within 24 hours</p>
+      </div>
+      <div class="contact-info-item">
+        <p class="modal-section-label">WhatsApp</p>
+        <p class="about-paragraph">💬 +91 98765 43210<br/>For quick questions & order updates</p>
+      </div>
+      <div class="contact-info-item">
+        <p class="modal-section-label">Head Office</p>
+        <p class="about-paragraph">📍 4th Floor, Tech Park One,<br/>Yerwada, Pune, Maharashtra 411006</p>
+      </div>
+    </div>
+
+    <div class="checkout-card">
+      <p class="modal-section-label">Frequently Asked Questions</p>
+      <div class="faq-list">${faqHtml}</div>
+    </div>
+
+    <div class="checkout-card">
+      <p class="modal-section-label">Send us a message</p>
+      <p id="contactFormError" class="address-form-error" style="display:none;">Please fill in all fields.</p>
+      <p id="contactFormSuccess" class="contact-form-success" style="display:none;">Thanks! Your message has been noted (demo only — no email is actually sent).</p>
+      <div class="address-form">
+        <label class="mock-signin-label">Your name*</label>
+        <input type="text" id="contact_name" class="mock-signin-input" placeholder="e.g. Priya Sharma" />
+
+        <label class="mock-signin-label">Email*</label>
+        <input type="email" id="contact_email" class="mock-signin-input" placeholder="e.g. priya@example.com" />
+
+        <label class="mock-signin-label">Message*</label>
+        <input type="text" id="contact_message" class="mock-signin-input" placeholder="How can we help?" />
+      </div>
+      <button class="mock-signin-submit" onclick="submitContactForm()">Send Message</button>
+    </div>
+
+    <p class="my-builds-sub" style="text-align:center;">This is a demo contact form — messages are not actually sent anywhere.</p>
+  `;
+}
+
+// Restore a previously "signed in" mock Google user, if any, when the page loads
+state.googleUser = loadGoogleUser();
+if (state.googleUser) state.saveDestination = "google";
+state.deliveryAddress = loadDeliveryAddress();
+
+render();
+renderNav();
+renderHome();
+</script>
+</body>
+</html>
